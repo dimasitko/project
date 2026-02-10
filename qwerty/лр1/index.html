@@ -1,0 +1,91 @@
+﻿<!doctype html>
+<html lang="uk">
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>Система пропусків у комп’ютерний клас </title>
+ <link rel="stylesheet" href="styles.css" />
+ <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="main-container">  
+<form id="form">
+<caption><h2>Додайте пропуск</h2></caption>
+ <div class="name">
+ <label for="nameInput">Введіть ваше ім'я</label>
+ <input id="nameInput" type="text" name="userName" placeholder="Іванов Іван" required />
+ <p class="error-text" id="nameError"></p>
+ </div>
+
+<div class="group">
+<label for="statusSelect">Причина</label>
+<select id="statusSelect" required>
+ <option value="">Оберіть причину</option>
+ <option value="Work">Робота</option>
+ <option value="Player">Гравець</option>
+ <option value="Other">Інше</option>
+</select>
+<p class="error-text" id="statusError"></p>
+</div>
+
+<div class="date">
+ <label for="dateInput">Дійсний до</label>   
+ <input id="dateInput" type="date" required />
+ <p class="error-text" id="dateError"></p>  
+</div>
+
+<div class="name">
+ <label for="adminInput">Ім'я Адміністратора</label>
+ <input id="adminInput" type="text" name="adminName" placeholder="Прізвище Ім'я" required/>
+ <p class="error-text" id="adminError"></p>
+ </div>
+
+<div class="comment-field">
+<label for="commentInput">Коментар</label>
+<textarea id="commentInput" rows="4"></textarea>
+<p class="error-text" id="commentError"></p>
+</div>
+
+<div class="buttons">
+<button id="submitBtn">Додати</button>
+<button id="clearBtn">Очистити</button>
+</div>
+</form>
+
+<div class="passes">
+ <h2>Список пропусків</h2>
+<table id="passesTable">
+  <div class="second-container">    
+  <div class="search">
+ <input id="searchInput" type="text" name="searchName" placeholder="Ім'я користувача" required />
+ <p class="error-text" id="searchError"></p>
+  </div>
+ <div class="group">
+<select id="statusSearch" required>
+ <option value="All">Всі причини</option>
+ <option value="Work">Робота</option>
+ <option value="Player">Гравець</option>
+ <option value="Other">Інше</option>
+</select>
+<p class="error-text" id="statusError"></p>
+</div>
+  </div>
+ <thead>
+ <tr>
+ <th>Ім'я</th>
+ <th>Причина</th>   
+ <th>Дійсний до</th>
+ <th>Адміністратор</th>
+ <th>Коментар</th>
+ </tr>
+ </thead>
+  <tbody>
+    <tr>
+  <td>
+</td>
+    </tr>
+  </tbody>
+ </table>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+/*база*/
+* {
+    box-sizing: border-box; 
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.main-container {
+    display: flex;
+    gap: 70px;
+    max-width: 1200px;
+    margin: 30px;
+}
+h2{
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+
+}
+
+
+/* Форма*/
+#form {
+    flex: 1;
+    background: rgb(195, 230, 255);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.group { 
+    margin-bottom: 15px;
+}
+label { 
+    display: block; 
+    font-weight: bold;
+    margin-bottom: 5px; 
+}
+option, select, input, textarea{ 
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ffffff; 
+    border-radius: 4px;
+ }
+button { 
+    width: 100%; 
+    padding: 10px; 
+    cursor: pointer; 
+    margin-top: 5px; 
+}
+
+#submitBtn{ 
+    background: #28a745; 
+    color: white; 
+    border-radius: 10px; 
+    border: none;
+}
+#clearBtn { 
+    background: #6c757d; 
+    color: white; 
+    border-radius: 10px; 
+    border: none;
+}
+
+
+
+ /* Таблиця*/
+.passes{
+    flex: 2 ;
+    padding: 10px;
+    background: rgb(195, 230, 255);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+#passesTable {
+    width: 100%;
+    border-collapse: collapse; 
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+th, td { 
+    padding: 10px; 
+    text-align: left;
+}   
+th {    
+    background: hsl(0, 0%, 100%);
+    border-radius: 10px;  
+ }
+
+.second-container {
+    display: flex;
+    gap: 10px; 
+    width: 100%; 
+ }
+ .search{
+    flex: 1;
+    gap: 10px;
+    border-radius: 10px;
+    
+ }
+.statusSearch{
+    flex: 1;
+    gap: 10px;
+    border-radius: 10px;
+    
+    
+}
+/*Кнопки*/
+.btn-small { 
+    padding: 5px 10px; 
+    width: 80px; 
+    font-size: 12px;
+    border-radius: 10px; 
+    
+}
+.edit-btn { 
+    background: #ffc107;
+    color: white;
+    border: none; 
+}
+.delete-btn { 
+    background: #dc3545; 
+    color: white; 
+    border: none; 
+}
