@@ -1,6 +1,6 @@
 /*база*/
 * {
-    box-sizing: border-box; 
+    box-sizing: border-box;
     font-family: sans-serif;
 }
 
@@ -11,119 +11,156 @@ body {
 
 .main-container {
     display: flex;
+    align-items: flex-start;
     gap: 70px;
-    max-width: 1200px;
+    width: 90%;
+    max-width: 1400px;
     margin: 30px;
 }
-h2{
+
+h2 {
     color: #333;
     margin-bottom: 30px;
     text-align: center;
 
 }
 
+.error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
 
 /* Форма*/
 #form {
-    flex: 1;
+    flex-shrink: 0;
+    width: 350px;
     background: rgb(195, 230, 255);
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-.group { 
+
+.group {
     margin-bottom: 15px;
+
 }
-label { 
-    display: block; 
+
+label {
+    display: block;
     font-weight: bold;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
-option, select, input, textarea{ 
-    width: 100%; 
-    padding: 8px; 
-    border: 1px solid #ffffff; 
+
+option,
+select,
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ffffff;
     border-radius: 4px;
- }
-button { 
-    width: 100%; 
-    padding: 10px; 
-    cursor: pointer; 
-    margin-top: 5px; 
 }
 
-#submitBtn{ 
-    background: #28a745; 
-    color: white; 
-    border-radius: 10px; 
-    border: none;
-}
-#clearBtn { 
-    background: #6c757d; 
-    color: white; 
-    border-radius: 10px; 
-    border: none;
-}
-
-
-
- /* Таблиця*/
-.passes{
-    flex: 2 ;
+button {
+    width: 100%;
     padding: 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+#submitBtn {
+    background: #28a745;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+#clearBtn {
+    background: #6c757d;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+
+
+/* Таблиця*/
+.passes {
+    width: 90%;
+    flex-grow: 1;
+    padding: 20px;
     background: rgb(195, 230, 255);
     border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-#passesTable {
+
+.table {
     width: 100%;
-    border-collapse: collapse; 
+    border-collapse: collapse;
     background: rgb(255, 255, 255);
     border-radius: 10px;
+    overflow: hidden;
+    max-height: 60%;
 }
-th, td { 
-    padding: 10px; 
-    text-align: left;
-}   
-th {    
+th {
+    padding: 10px;
+    text-align: center;
     background: hsl(0, 0%, 100%);
-    border-radius: 10px;  
- }
+    border-radius: 10px;
+    width: 20%;
+}
 
-.second-container {
+td {
+    text-align: center;
+    padding: 10px;
+    background: hsl(0, 0%, 100%);
+    border-radius: 10px;
+    width: 20%;
+}
+
+.filters {
+    margin-bottom: 20px;
     display: flex;
-    gap: 10px; 
-    width: 100%; 
- }
- .search{
+    gap: 10px;
+    width: 100%;
+}
+
+.search {
     flex: 1;
     gap: 10px;
     border-radius: 10px;
-    
- }
-.statusSearch{
+
+}
+
+#statusSearch {
     flex: 1;
     gap: 10px;
     border-radius: 10px;
-    
-    
 }
-/*Кнопки*/
-.btn-small { 
-    padding: 5px 10px; 
-    width: 80px; 
-    font-size: 12px;
-    border-radius: 10px; 
-    
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    justify-content: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    max-width: 100px;
 }
-.edit-btn { 
+.edit-btn {
+    width: 100px;
     background: #ffc107;
     color: white;
-    border: none; 
+    border: none;
+    border-radius: 10px;
 }
-.delete-btn { 
-    background: #dc3545; 
-    color: white; 
-    border: none; 
+
+.delete-btn {
+    width: 100px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 10px;
 }
