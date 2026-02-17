@@ -152,7 +152,8 @@ function editPass(id) {
     const selectedStatus = statusSearch.value;                 
     const filteredItems = items.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm) || item.admin.toLowerCase().includes(searchTerm);
-        return matchesSearch
+        const matchesStatus = selectedStatus === 'Всі' || item.status === selectedStatus;
+        return matchesSearch && matchesStatus;
     });
     renderTable(filteredItems);
 }
@@ -177,4 +178,4 @@ searchInput.addEventListener('input', filterPasses);
 statusSearch.addEventListener('change', filterPasses);
 
 renderTable(items);
-filterPasses();
+
