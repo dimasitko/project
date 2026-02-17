@@ -1,3 +1,5 @@
+let items = JSON.parse(localStorage.getItem('passes')) || [];
+
 const form = document.getElementById('form');
 const submitBtn = document.getElementById('submitBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -9,8 +11,12 @@ const statusSelect = document.getElementById('statusSelect');
 const dateInput = document.getElementById('dateInput');
 const adminInput = document.getElementById('adminInput');
 const commentInput = document.getElementById('commentInput');
+const statusOptions = ['Всі', 'Вчитель', 'Студент', 'Інше'];
 
-let items = [];
+
+function saveToLocalStorage() {
+    localStorage.setItem('passes', JSON.stringify(items));
+}  
 
 function addPass(event) {
     event.preventDefault();
@@ -34,6 +40,7 @@ function addPass(event) {
         comment
     };
     items.push(newItem);
+    saveToLocalStorage();
     renderTable(items);
     clearForm(event);
 
@@ -122,6 +129,7 @@ function clearForm(event) {
 function deletePass(id) {
     items = items.filter(item => item.id !== id);
     renderTable(items);
+    saveToLocalStorage();
 }
 
 function editPass(id) {
@@ -135,6 +143,21 @@ function editPass(id) {
         deletePass(id);
     }
 }
+ function filterPasses() {
+    if(searchInput.value.trim() === '' && statusSearch.value === 'Всі'){
+        renderTable(items)
+        return;
+    }else{
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedStatus = statusSearch.value;                 
+    const filteredItems = items.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm) || item.admin.toLowerCase().includes(searchTerm);
+        return matchesSearch
+    });
+    renderTable(filteredItems);
+}
+ }
+
 
 submitBtn.addEventListener('click', addPass);
 clearBtn.addEventListener('click', clearForm);
@@ -153,4 +176,5 @@ passesTable.addEventListener('click', (event) => {
 searchInput.addEventListener('input', filterPasses);
 statusSearch.addEventListener('change', filterPasses);
 
-
+renderTable(items);
+filterPasses();

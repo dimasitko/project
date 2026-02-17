@@ -1,6 +1,5 @@
 ﻿<!doctype html>
 <html lang="uk">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +12,7 @@
   <div class="main-container">
     <form id="form">
       <caption>
-        <h2>Додайте пропуск</h2>
+        <h2>Додайте пропуск</h2> 
       </caption>
       <div class="name">
         <label for="nameInput">Введіть ваше ім'я</label>
@@ -65,15 +64,14 @@
           </div>
           <div class="group">
             <select id="statusSearch" required>
-              <option value="Всі">Всі причини</option>
-              <option value="Вчитель">Вчитель</option>
-              <option value="Студент">Студент</option>
-              <option value="Інше">Інше</option>
+              <option value="Всі" id="All">Всі причини</option>
+              <option value="Вчитель" id="Teacher">Вчитель</option>
+              <option value="Студент" id="Student">Студент</option>
+              <option value="Інше" id="Other">Інше</option>
             </select>
             <p class="error-text" id="statusError"></p>
           </div>
-        </div>
-  
+        </div>  
         <thead>
           <tr>
             <th>Ім'я</th>
