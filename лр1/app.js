@@ -12,6 +12,7 @@ const dateInput = document.getElementById('dateInput');
 const adminInput = document.getElementById('adminInput');
 const commentInput = document.getElementById('commentInput');
 const statusOptions = ['Всі', 'Вчитель', 'Студент', 'Інше'];
+let editId = null;
 
 
 function saveToLocalStorage() {
@@ -31,15 +32,29 @@ function addPass(event) {
     const admin = adminInput.value.trim();
     const comment = commentInput.value.trim();
 
-    const newItem = {
-        id: Date.now(),
-        name,
-        status,
-        date,
-        admin,
-        comment
-    };
-    items.push(newItem);
+    if (editId !== null) {
+        const index = items.findIndex(item => item.id === editId);
+        if (index !== -1) {
+            items[index] = { 
+                id: editId, 
+                name, 
+                status, 
+                date, 
+                admin, 
+                comment 
+            };
+        }
+    } else {
+        const newItem = {
+            id: Date.now(),
+            name, 
+            status, 
+            date,
+            admin,
+            comment
+        };
+            items.push(newItem)
+    }
     saveToLocalStorage();
     renderTable(items);
     clearForm(event);
@@ -51,45 +66,58 @@ function validateForm() {
 
     if (!nameInput.value.trim()) {
         document.getElementById('nameError').textContent = 'Заповніть ім\'я';
+        nameInput.classList.add('invalid');
         isValid = false;
     } else if (nameInput.value.length > 20) {
         document.getElementById('nameError').textContent = 'Максимум 20 символів!';
+        nameInput.classList.add('invalid');
         isValid = false;
     } else {
         document.getElementById('nameError').textContent = '';
+        nameInput.classList.remove('invalid');
     }
 
     if (!statusSelect.value) {
         document.getElementById('statusError').textContent = 'Оберіть причину';
+        statusSelect.classList.add('invalid');
         isValid = false;
     } else {
         document.getElementById('statusError').textContent = '';
+        statusSelect.classList.remove('invalid');
     }
 
     if (!dateInput.value) {
         document.getElementById('dateError').textContent = 'Оберіть дату';
+        dateInput.classList.add('invalid');
         isValid = false;
     } else if (new Date(dateInput.value) < new Date()) {
         document.getElementById('dateError').textContent = 'Дата не може бути в минулому';
+        dateInput.classList.add('invalid');
         isValid = false;
     } else {
         document.getElementById('dateError').textContent = '';
+        dateInput.classList.remove('invalid');
     }
 
     if (!adminInput.value.trim()) {
         document.getElementById('adminError').textContent = 'Заповніть ім\'я адміністратора';
+        adminInput.classList.add('invalid');
         isValid = false;
     } else if (adminInput.value.length > 20) {
         document.getElementById('adminError').textContent = 'Максимум 20 символів!';
+        adminInput.classList.add('invalid');
         isValid = false;
     } else {
         document.getElementById('adminError').textContent = '';
+        adminInput.classList.remove('invalid');
     }
     if (commentInput.value.length > 35) {
         document.getElementById('commentError').textContent = 'Максимум 35 символів!';
+        commentInput.classList.add('invalid');
         isValid = false;
     } else {
         document.getElementById('commentError').textContent = '';
+        commentInput.classList.remove('invalid');
     }
     return isValid;
 }
@@ -124,6 +152,9 @@ function clearForm(event) {
     dateInput.value = '';
     adminInput.value = '';
     commentInput.value = '';
+    submitBtn.textContent = 'Додати';
+    editId = null;
+    nameInput.focus();
 }
 
 function deletePass(id) {
@@ -140,7 +171,8 @@ function editPass(id) {
         dateInput.value = item.date;
         adminInput.value = item.admin.trim();
         commentInput.value = item.comment;
-        deletePass(id);
+        editId = id;
+        nameInput.focus();
     }
 }
  function filterPasses() {
@@ -151,7 +183,7 @@ function editPass(id) {
     const searchTerm = searchInput.value.toLowerCase();
     const selectedStatus = statusSearch.value;                 
     const filteredItems = items.filter(item => {
-        const matchesSearch = item.name.toLowerCase().includes(searchTerm) || item.admin.toLowerCase().includes(searchTerm);
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm);
         const matchesStatus = selectedStatus === 'Всі' || item.status === selectedStatus;
         return matchesSearch && matchesStatus;
     });
@@ -171,11 +203,10 @@ passesTable.addEventListener('click', (event) => {
 passesTable.addEventListener('click', (event) => {
     if (event.target.classList.contains('edit-btn')) {
         const id = Number(event.target.dataset.id);
+        submitBtn.textContent = 'Зберегти';
         editPass(id);
     }
 });
 searchInput.addEventListener('input', filterPasses);
 statusSearch.addEventListener('change', filterPasses);
-
 renderTable(items);
-

@@ -25,6 +25,11 @@ h2 {
 
 }
 
+input.invalid, select.invalid, textarea.invalid {
+    border: 2px solid red;
+    background-color: #fff5f5;
+}
+
 .error-text {
     color: red;
     font-size: 12px;
