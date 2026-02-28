@@ -47,7 +47,7 @@ function addPass(event) {
     } else {
         const newItem = {
             id: Date.now(),
-            name, 
+            name,
             status, 
             date,
             admin,
