@@ -7,7 +7,6 @@
     "express": "^5.2.1",
     "uuid": "^9.0.1"
   },
-  "devDependencies": {},
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",

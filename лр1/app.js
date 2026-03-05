@@ -1,4 +1,5 @@
-let items = JSON.parse(localStorage.getItem('passes')) || [];
+const API_URL = '/api/passes';
+let items = [];
 
 const form = document.getElementById('form');
 const submitBtn = document.getElementById('submitBtn');
@@ -14,51 +15,72 @@ const commentInput = document.getElementById('commentInput');
 const statusOptions = ['Всі', 'Вчитель', 'Студент', 'Інше'];
 let editId = null;
 
+async function loadPasses() {
+    try {
+        const url = new URL(API_URL, window.location.origin);
+        
+        const searchTerm = searchInput.value.trim();
+        const selectedStatus = statusSearch.value;
 
-function saveToLocalStorage() {
-    localStorage.setItem('passes', JSON.stringify(items));
-}  
+        if (searchTerm) {
+            url.searchParams.append('search', searchTerm);
+        }
+        if (selectedStatus && selectedStatus !== 'Всі') {
+            url.searchParams.append('status', selectedStatus);
+        }
 
-function addPass(event) {
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            items = data.items || data || []; 
+            renderTable(items);
+        }
+    } catch (error) {
+        console.error('Помилка завантаження даних:', error);
+    }
+}
+
+async function addPass(event) {
     event.preventDefault();
 
     if (!validateForm()) {
         return;
     }
 
-    const name = nameInput.value.trim();
-    const status = statusSelect.value;
-    const date = dateInput.value;
-    const admin = adminInput.value.trim();
-    const comment = commentInput.value.trim();
+    const passData = {
+        name: nameInput.value.trim(),
+        status: statusSelect.value,
+        date: dateInput.value,
+        admin: adminInput.value.trim(),
+        comment: commentInput.value.trim()
+    };
 
-    if (editId !== null) {
-        const index = items.findIndex(item => item.id === editId);
-        if (index !== -1) {
-            items[index] = { 
-                id: editId, 
-                name, 
-                status, 
-                date, 
-                admin, 
-                comment 
-            };
+    try {
+        if (editId !== null) {
+            const response = await fetch(`${API_URL}/${editId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(passData)
+            }); 
+            if (response.ok) {
+                await loadPasses(); 
+            }
+        } else { 
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(passData)
+            });
+            
+            if (response.ok) {
+                await loadPasses(); 
+            }
         }
-    } else {
-        const newItem = {
-            id: Date.now(),
-            name,
-            status, 
-            date,
-            admin,
-            comment
-        };
-            items.push(newItem)
+        
+        clearForm(event);
+    } catch (error) {
+        console.error('Помилка збереження:', error);
     }
-    saveToLocalStorage();
-    renderTable(items);
-    clearForm(event);
-
 }
 
 function validateForm() {
@@ -157,14 +179,22 @@ function clearForm(event) {
     nameInput.focus();
 }
 
-function deletePass(id) {
-    items = items.filter(item => item.id !== id);
-    renderTable(items);
-    saveToLocalStorage();
+async function deletePass(id) {
+   try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            await loadPasses();
+        }
+    } catch (error) {
+        console.error('Помилка видалення:', error);
+    }
 }
 
 function editPass(id) {
-    const item = items.find(item => item.id === id);
+    const item = items.find(item => String(item.id)=== String(id));
     if (item) {
         nameInput.value = item.name.trim();
         statusSelect.value = item.status;
@@ -207,6 +237,6 @@ passesTable.addEventListener('click', (event) => {
         editPass(id);
     }
 });
-searchInput.addEventListener('input', filterPasses);
-statusSearch.addEventListener('change', filterPasses);
-renderTable(items);
+searchInput.addEventListener('input', loadPasses);
+statusSearch.addEventListener('change', loadPasses);
+loadPasses();
