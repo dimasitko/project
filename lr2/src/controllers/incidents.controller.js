@@ -2,7 +2,39 @@ const service = require('../services/incidents.service')
 
 class PassesController {
     
-    getById(res, req, next){
-        
+    getAll(req,res,next){
+        try{
+            const passes = service.getAllPasses(req.query);
+            res.status(200).json({ items : passes, total : passes.length});
+        } catch (error) { next(error); }
+    }
+
+    getById(req, res, next){
+         try{
+            const pass = service.getPassById(req.params.id);
+            res.status(200).json({ pass });
+        } catch (error) { next(error); }
+    }
+
+    create(req,res,next){
+        try{
+            const newPass = service.createPass(req.body);
+            res.status(201).json(newPass);
+        } catch (error) { next(error); }    
+    }
+    
+    update(req,res,next){
+        try{
+            const updatedPass = service.updatePass(req.params.id, req.body);
+            res.status(200).json(updatedPass);
+        } catch (error) { next(error); }
+    }
+
+    delete(req,res,next){
+        try{
+            service.deletePass(req.params.id);
+            res.status(204).send();
+        } catch (error) { next(error); }
     }
 }
+module.exports= new PassesController();

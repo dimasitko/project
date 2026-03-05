@@ -1,15 +1,11 @@
+const express = require('express')
+const router = express.Router();
+const controller = require('../controllers/incidents.controller')
 
-export function createPassRouter() {
+router.get("/", controller.getAll);
+router.get("/:id", controller.getById);
+router.post("/", controller.create);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.delete);
 
-const router = Router();
-
-router.get("/", listPass);
-
-router.get("/new", getNewPassTemplate);
-router.get("/:id", getPassById);
-router.post("/", createPass);
-router.put("/:id", updatePass);
-router.delete("/:id", deletePass);
-
-return router;
-}
+module.exports = router;

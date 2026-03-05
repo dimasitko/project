@@ -40,7 +40,7 @@ getAllPasses(query) {
 }
 
 getPassById(id){
-    const pass = repository.getById();
+    const pass = repository.getById(id);
 
     if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
     return pass;
@@ -60,11 +60,11 @@ createPass(dto){
 }
 
 updatePass(id, patch){
-    this.validateDto(dto);
+    this.validateDto(patch);
     const pass = repository.getById(id);
 
     if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
-    return repository.update(id, dto);
+    return repository.update(id, patch);
 }
 
 deletePass(id){
