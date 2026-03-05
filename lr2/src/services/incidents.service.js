@@ -32,12 +32,13 @@ getAllPasses(query) {
   // Фільтрація
    if (query.status && query.status !== 'Всі') {
             passes = passes.filter(p => p.status === query.status);
+   }
         if (query.search) {
             passes = passes.filter(p => p.name.toLowerCase().includes(query.search.toLowerCase()));
         }
         return passes;
     }
-}
+
 
 getPassById(id){
     const pass = repository.getById(id);

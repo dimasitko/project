@@ -4,7 +4,7 @@ let items = [];
 const form = document.getElementById('form');
 const submitBtn = document.getElementById('submitBtn');
 const clearBtn = document.getElementById('clearBtn');
-const passesTable = document.getElementById('pasessTable').querySelector('tbody');
+const passesTable = document.getElementById('passesTable').querySelector('tbody');
 const searchInput = document.getElementById('searchInput');
 const statusSearch = document.getElementById('statusSearch');
 const nameInput = document.getElementById('nameInput');
@@ -145,25 +145,23 @@ function validateForm() {
 }
 
 
-
-function renderTable(items) {
-    const tbody = document.getElementById("passesTable").querySelector("tbody");
-    const rowsHtml = items.map((item) => `
- <tr>
- <td>${item.name}</td>
- <td>${item.status}</td>
- <td>${item.date}</td>
- <td>${item.admin}</td>
- <td>${item.comment}</td>
- <td>
- <div class="btn-group">
- <button class="edit-btn" data-id="${item.id}">Редагувати</button>
- <button class="delete-btn" data-id="${item.id}">Видалити</button>
- </div>
- </td>
- </tr>
- `).join("");
-    tbody.innerHTML = rowsHtml;
+function renderTable(itemsToRender) {
+    const rowsHtml = itemsToRender.map((item) => `
+        <tr>
+            <td>${item.name}</td>
+            <td>${item.status}</td>
+            <td>${item.date}</td>
+            <td>${item.admin}</td>
+            <td>${item.comment}</td>
+            <td>
+                <div class="btn-group">
+                    <button class="edit-btn" data-id="${item.id}">Редагувати</button>
+                    <button class="delete-btn" data-id="${item.id}">Видалити</button>
+                </div>
+            </td>
+        </tr>
+    `).join("");
+    passesTable.innerHTML = rowsHtml;
 }
 
 
@@ -205,34 +203,18 @@ function editPass(id) {
         nameInput.focus();
     }
 }
- function filterPasses() {
-    if(searchInput.value.trim() === '' && statusSearch.value === 'Всі'){
-        renderTable(items)
-        return;
-    }else{
-    const searchTerm = searchInput.value.toLowerCase();
-    const selectedStatus = statusSearch.value;                 
-    const filteredItems = items.filter(item => {
-        const matchesSearch = item.name.toLowerCase().includes(searchTerm);
-        const matchesStatus = selectedStatus === 'Всі' || item.status === selectedStatus;
-        return matchesSearch && matchesStatus;
-    });
-    renderTable(filteredItems);
-}
- }
-
 
 submitBtn.addEventListener('click', addPass);
 clearBtn.addEventListener('click', clearForm);
 passesTable.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-btn')) {
-        const id = Number(event.target.dataset.id);
+        const id = event.target.dataset.id;
         deletePass(id);
     }
 });
 passesTable.addEventListener('click', (event) => {
     if (event.target.classList.contains('edit-btn')) {
-        const id = Number(event.target.dataset.id);
+        const id = event.target.dataset.id;
         submitBtn.textContent = 'Зберегти';
         editPass(id);
     }
