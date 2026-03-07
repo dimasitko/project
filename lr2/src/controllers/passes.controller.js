@@ -1,4 +1,5 @@
-const service = require('../services/incidents.service')
+const service = require('../services/passes.service');
+const { CreatePassDto, UpdatePassDto, PassResponseDto } = require('../dtos/passes.dto');
 
 class PassesController {
     
@@ -18,15 +19,17 @@ class PassesController {
 
     create(req,res,next){
         try{
-            const newPass = service.createPass(req.body);
-            res.status(201).json(newPass);
+            const dto = new CreatePassDto(req.body).validate();
+            const newPass = service.createPass(dto);
+            res.status(201).json(new PassResponseDto(newPass));
         } catch (error) { next(error); }    
     }
     
     update(req,res,next){
         try{
-            const updatedPass = service.updatePass(req.params.id, req.body);
-            res.status(200).json(updatedPass);
+            const patchDto = new UpdatePassDto(req.body).validate();
+            const updatedPass = service.updatePass(req.params.id, patchDto);
+            res.status(200).json(new PassResponseDto(updatedPass));
         } catch (error) { next(error); }
     }
 

@@ -1,0 +1,54 @@
+const {v4 : uuidv4} = require('uuid');
+const repository = require ('../repositories/passes.repository');
+const ApiError = require ('../utils/ApiError');
+
+class PassesService{
+
+getAllPasses(query) {
+  let passes = repository.getAll();
+
+  // Фільтрація
+   if (query.status && query.status !== 'Всі') {
+            passes = passes.filter(p => p.status === query.status);
+   }
+        if (query.search) {
+            passes = passes.filter(p => p.name.toLowerCase().includes(query.search.toLowerCase()));
+        }
+        return passes;
+    }
+
+
+getPassById(id){
+    const pass = repository.getById(id);
+
+    if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
+    return pass;
+}
+
+createPass(createDto){
+    const pass = {
+        id: uuidv4(),
+        name: dto.name.trim(),
+        status: dto.status,
+        date: dto.date,
+        admin: dto.admin.trim(),
+        comment: dto.comment ? dto.comment.trim(): ""
+    };
+    return repository.add(pass);
+}
+
+updatePass(id, updateDto){
+    const pass = repository.getById(id);
+    if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
+
+    const mergedData = { ...pass, ...updateDto };
+    return repository.update(id, mergedData);
+}
+
+deletePass(id){
+    const pass = repository.getById(id);
+    if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
+    repository.delete(id);
+}
+}
+module.exports = new PassesService();

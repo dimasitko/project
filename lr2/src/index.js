@@ -1,6 +1,6 @@
 const express = require("express");
-const errorHandler = require('../src/middleware/error-handler.middleware')
-const passesRoutes = require('../src/routes/incedents.routes')
+const errorHandler = require('../middleware/error-handler.middleware')
+const passesRoutes = require('../routes/passes.routes')
 
 const app = express();
 
