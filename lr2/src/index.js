@@ -1,11 +1,13 @@
 const express = require("express");
 const errorHandler = require('./middleware/error-handler.middleware');
 const passesRoutes = require('./routes/passes.routes');
+const loggerMiddleware = require("./middleware/request-logging.middleware");
 
 const app = express();
 
 const PORT = process.env.PORT ?? 3000;
 app.use(express.json());
+app.use(loggerMiddleware);
 app.use(express.static('public'));
 
 app.get("/health", (req, res) => res.status(200).json({ ok: true }));
