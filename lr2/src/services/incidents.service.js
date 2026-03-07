@@ -61,10 +61,12 @@ createPass(dto){
 }
 
 updatePass(id, patch){
-    this.validateDto(patch);
     const pass = repository.getById(id);
-
     if(!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
+
+    const mergedData = { ...pass, ...patch };
+    this.validateDto(mergedData);
+    
     return repository.update(id, patch);
 }
 
