@@ -28,11 +28,11 @@ getPassById(id){
 createPass(createDto){
     const pass = {
         id: uuidv4(),
-        name: dto.name.trim(),
-        status: dto.status,
-        date: dto.date,
-        admin: dto.admin.trim(),
-        comment: dto.comment ? dto.comment.trim(): ""
+        name:createDto.name.trim(),
+        status:createDto.status,
+        date: createDto.date,
+        admin:createDto.admin.trim(),
+        comment: createDto.comment ? createDto.comment.trim(): ""
     };
     return repository.add(pass);
 }

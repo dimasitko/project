@@ -41,23 +41,29 @@ class UpdatePassDto {
     }
     validate() {
        const errors = [];
-        if (!this.name || this.name.trim().length === 0) errors.push({ field: 'name', message: "Ім'я обов'язкове" });
-        if (this.name && this.name.length > 20) errors.push({ field: 'name', message: "Максимум 20 символів" });
-        
-        const validStatuses = ['Вчитель', 'Студент', 'Інше'];
-        if (!validStatuses.includes(this.status)) errors.push({ field: 'status', message: "Некоректна причина" });
-        
-        if (!this.date) errors.push({ field: 'date', message: "Оберіть дату" });
-        
-        if (!this.admin || this.admin.trim().length === 0) errors.push({ field: 'admin', message: "Ім'я адміністратора обов'язкове" });
-        if (this.admin && this.admin.length > 20) errors.push({ field: 'admin', message: "Максимум 20 символів" });
-        
-        if (this.comment && this.comment.length > 35) errors.push({ field: 'comment', message: "Максимум 35 символів" });
+       
+        if (this.name !== undefined) {
+            if (this.name.trim().length === 0) errors.push({ field: 'name', message: "Ім'я обов'язкове" });
+            if (this.name.length > 20) errors.push({ field: 'name', message: "Максимум 20 символів" });
+        }        
+        if (this.status !== undefined) {
+            const validStatuses = ['Вчитель', 'Студент', 'Інше'];
+            if (!validStatuses.includes(this.status)) errors.push({ field: 'status', message: "Некоректна причина" });
+        }  
+        if (this.date !== undefined) {
+            if (!this.date) errors.push({ field: 'date', message: "Оберіть дату" });
+        }        
+        if (this.admin !== undefined) {
+            if (this.admin.trim().length === 0) errors.push({ field: 'admin', message: "Ім'я адміністратора обов'язкове" });
+            if (this.admin.length > 20) errors.push({ field: 'admin', message: "Максимум 20 символів" });
+        }        
+        if (this.comment !== undefined) {
+            if (this.comment.length > 35) errors.push({ field: 'comment', message: "Максимум 35 символів" });
+        }
 
         if (errors.length > 0) {
             throw new ApiError(400, "VALIDATION_ERROR", "Помилка валідації даних", errors);
-        }
-        
+        }        
         return this;
     }
 }
