@@ -13,7 +13,12 @@ const dateInput = document.getElementById('dateInput');
 const adminInput = document.getElementById('adminInput');
 const commentInput = document.getElementById('commentInput');
 const statusOptions = ['Всі', 'Вчитель', 'Студент', 'Інше'];
+const userForm = document.getElementById('userForm');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const views = document.querySelectorAll('.view');
 let editId = null;
+
+
 
 async function loadPasses() {
     try {
@@ -39,6 +44,24 @@ async function loadPasses() {
         console.error('Помилка завантаження даних:', error);
     }
 }
+
+async function loadUsers() {
+    try {
+        const res = await fetch('/api/users');
+        if (!res.ok) return;
+        const users = await res.json();
+        const tbody = document.querySelector('#usersTable tbody');
+        
+        tbody.innerHTML = users.map(u => `
+            <tr>
+                <td>${u.name}</td>
+                <td>${u.role}</td>
+                <td><button class="delete-btn" onclick="deleteUser('${u.id}')">Видалити</button></td>
+            </tr>
+        `).join('');
+    } catch (e) { console.error('Помилка завантаження користувачів:', e); }
+}
+
 
 async function addPass(event) {
     event.preventDefault();
@@ -221,4 +244,46 @@ passesTable.addEventListener('click', (event) => {
 });
 searchInput.addEventListener('input', loadPasses);
 statusSearch.addEventListener('change', loadPasses);
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        views.forEach(v => v.classList.remove('active'));
+    
+        btn.classList.add('active');
+        const targetId = btn.getAttribute('data-target');
+        document.getElementById(targetId).classList.add('active');
+
+        if (targetId === 'users-view') {
+            loadUsers();
+        }
+    });
+});
+
+if (userForm) {
+    userForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('userNameInput').value.trim(),
+            role: document.getElementById('userRoleSelect').value
+        };
+        
+        try {
+            await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            userForm.reset();
+            loadUsers();
+        } catch (e) { console.error('Помилка збереження користувача:', e); }
+    });
+}
+
+window.deleteUser = async function(id) {
+    if(!confirm('Дійсно видалити користувача?')) return;
+    try {
+        await fetch(`/api/users/${id}`, { method: 'DELETE' });
+        loadUsers();
+    } catch (e) { console.error('Помилка видалення:', e); }
+};
 loadPasses();

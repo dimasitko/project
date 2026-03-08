@@ -9,7 +9,13 @@
 </head>
 
 <body>
-  <div class="main-container">
+  <nav class="top-menu">
+    <button class="tab-btn active" data-target="passes-view">Пропуски</button>
+    <button class="tab-btn" data-target="users-view">Користувачі</button>
+  </nav>
+
+  <div id="passes-view" class="view active">
+    <div class="main-container">
     <form id="form">
       <caption>
         <h2>Додайте пропуск</h2> 
@@ -90,5 +96,39 @@
         </div>
     </table>
   </div>
+  </div>
+ </div>
+
+  <div id="users-view" class="view">
+    <div class="main-container">
+      <form id="userForm">
+        <h2>Додати користувача</h2>
+        <div class="group">
+          <label>Ім'я</label>
+          <input id="userNameInput" type="text" required />
+        </div>
+        <div class="group">
+          <label>Роль</label>
+          <select id="userRoleSelect" required>
+            <option value="Студент">Студент</option>
+            <option value="Вчитель">Вчитель</option>
+            <option value="Адміністратор">Адміністратор</option>
+          </select>
+        </div>
+        <button type="submit" id="submitBtn">Зберегти користувача</button>
+      </form>
+
+      <div class="passes">
+        <h2>Список користувачів</h2>
+        <table class="table" id="usersTable">
+          <thead>
+            <tr><th>Ім'я</th><th>Роль</th><th>Дії</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

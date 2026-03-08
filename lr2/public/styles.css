@@ -169,3 +169,51 @@ td {
     border: none;
     border-radius: 10px;
 }
+.top-menu {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    background: rgb(195, 230, 255);
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1400px;
+}
+#userForm {
+    flex-shrink: 1;
+    width: 350px;
+    background: rgb(195, 230, 255);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.tab-btn {
+    width: auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #333;
+}
+
+.tab-btn.active {
+    background: #28a745;
+    color: white;
+}
+
+.tab-btn:hover:not(.active) {
+    background: #e2e2e2;
+}
+.view {
+    display: none; 
+}
+
+.view.active {
+    display: block;
+}
