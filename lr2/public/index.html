@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Система пропусків у комп’ютерний клас </title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="passes-dom.js" defer></script>
+  <script src="passes-functions.js" defer></script>
+  <script src="passes-handlers.js" defer></script>
+
+  <script src="users-dom.js" defer></script>
+  <script src="users-functions.js" defer></script>
+  <script src="users-handlers.js" defer></script>
+
   <script src="app.js" defer></script>
 </head>
 
@@ -106,14 +114,17 @@
         <div class="group">
           <label>Ім'я</label>
           <input id="userNameInput" type="text" required />
+          <p class="error-text" id="userNameError"></p>
         </div>
         <div class="group">
           <label>Роль</label>
           <select id="userRoleSelect" required>
+            <option value="">Оберіть роль</option>
             <option value="Студент">Студент</option>
             <option value="Вчитель">Вчитель</option>
             <option value="Адміністратор">Адміністратор</option>
           </select>
+          <p class="error-text" id="userRoleError"></p>
         </div>
         <button type="submit" id="submitUserBtn">Зберегти користувача</button>
       </form>
