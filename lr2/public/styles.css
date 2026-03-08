@@ -190,6 +190,13 @@ td {
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+#submitUserBtn{
+    background: #28a745;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
 .tab-btn {
     width: auto;
     padding: 10px 20px;
