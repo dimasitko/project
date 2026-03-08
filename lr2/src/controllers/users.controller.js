@@ -1,4 +1,4 @@
-const service = require('../services/passes.service');
+const service = require('../services/users.service');
 const { CreateUserDto, UpdateUserDto, UserResponseDto } = require('../dtos/users.dto');
 
 class UsersController {
@@ -6,7 +6,7 @@ class UsersController {
     getAll(req,res,next){
         try{
             const users = service.getAllUsers(req.query);
-            res.status(200).json({ items : users, total : users.length});
+            res.status(200).json( users );
         } catch (error) { next(error); }
     }
 

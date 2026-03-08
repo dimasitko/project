@@ -7,7 +7,7 @@ class UsersRepository {
     getById(id) {
         return users.find(p => p.id === id);
     }
-    add(pass) {
+    add(user) {
         users.push(user);
         return user;
     }

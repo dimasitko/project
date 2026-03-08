@@ -6,13 +6,14 @@ class UsersService{
 
 getAllUsers(query) {
   let passes = repository.getAll();
+  return repository.getAll();
 }
 
 getUserById(id){
     const user = repository.getById(id);
 
-    if(!pass) throw new ApiError(404, "NOT_FOUND", "Користувача не знайдено");
-    return pass;
+    if(!user) throw new ApiError(404, "NOT_FOUND", "Користувача не знайдено");
+    return user;
 }
 
 createUser(createDto){
@@ -21,7 +22,7 @@ createUser(createDto){
         name:createDto.name.trim(),
         role:createDto.role
     };
-    return repository.add(pass);
+    return repository.add(user);
 }
 
 updateUser(id, updateDto){

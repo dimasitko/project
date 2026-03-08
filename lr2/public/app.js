@@ -280,7 +280,6 @@ if (userForm) {
 }
 
 window.deleteUser = async function(id) {
-    if(!confirm('Дійсно видалити користувача?')) return;
     try {
         await fetch(`/api/users/${id}`, { method: 'DELETE' });
         loadUsers();
