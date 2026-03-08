@@ -16,5 +16,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    loadPasses();
+    
 });

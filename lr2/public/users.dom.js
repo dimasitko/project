@@ -1,0 +1,6 @@
+const userForm = document.getElementById('userForm');
+const userNameInput = document.getElementById('userNameInput');
+const userRoleSelect = document.getElementById('userRoleSelect');
+const usersTableBody = document.querySelector('#usersTable tbody');
+const userNameError = document.getElementById('userNameError');
+const userRoleError = document.getElementById('userRoleError');

@@ -30,6 +30,12 @@ input.invalid, select.invalid, textarea.invalid {
     background-color: #fff5f5;
 }
 
+#userRoleError, #userNameError{
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
 .error-text {
     color: red;
     font-size: 12px;
