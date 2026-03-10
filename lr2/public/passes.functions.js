@@ -58,6 +58,8 @@ async function addPass(event) {
         });
         
         if (response.ok) { 
+            const action = editPassId ? 'оновив' : 'додав';
+            createLog(`Адміністратор '${adminName}' ${action} пропуск користувача '${userName}'`);
             await loadPasses(); 
             clearPassForm(); 
         }
@@ -96,9 +98,13 @@ function clearPassForm(event) {
 }
 
 async function deletePass(id) {
+    const pass = passesList.find(p => String(p.id) === String(id));
     try {
         const response = await fetch(`${PASSES_API_URL}/${id}`, { method: 'DELETE' });
-        if (response.ok) await loadPasses();
+        if (response.ok){
+           if (pass) createLog(`Видалено пропуск користувача '${pass.name}'`);
+             await loadPasses();
+        }
     } catch (error) { console.error('Помилка видалення:', error); }
 }
 

@@ -7,7 +7,7 @@ async function loadUsers() {
         const url = new URL(USERS_API_URL, window.location.origin);
         const searchInput = document.getElementById('userSearchInput');
         const roleSearch = document.getElementById('userRoleSearch');
-        
+
         if (searchInput && searchInput.value.trim()) {
             url.searchParams.append('search', searchInput.value.trim());
         }
@@ -60,6 +60,8 @@ async function addUser(event) {
         });
 
         if (response.ok) {
+            const action = editUserId ? 'Оновлено' : 'Додано нового';
+            createLog(`${action} користувача (${userData.role}) '${userData.name}'`);
             await loadUsers();
             clearUserForm();
         }
@@ -106,9 +108,13 @@ function validateUserForm() {
 }
 
 async function deleteUser(id) {
+    const user = usersList.find(u => String(u.id) === String(id));
     try {
         const response = await fetch(`${USERS_API_URL}/${id}`, { method: 'DELETE' });
-        if (response.ok) await loadUsers();
+        if (response.ok){
+            if (user) createLog(`Видалено користувача (${user.role}) '${user.name}'`);
+            await loadUsers();
+        }
     } catch (error) { console.error('Помилка видалення:', error); }
 }
 

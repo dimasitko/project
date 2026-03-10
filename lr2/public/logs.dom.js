@@ -1,0 +1,1 @@
+const logsTableBody = document.querySelector('#logsTable tbody');

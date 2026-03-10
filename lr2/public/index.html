@@ -13,6 +13,9 @@
   <script src="users.functions.js" defer></script>
   <script src="users.handlers.js" defer></script>
 
+  <script src="logs.dom.js" defer></script>
+  <script src="logs.functions.js" defer></script>
+
   <script src="app.js" defer></script>
 </head>
 
@@ -20,6 +23,7 @@
   <nav class="top-menu">
     <button class="tab-btn active" data-target="passes-view">Пропуски</button>
     <button class="tab-btn" data-target="users-view">Користувачі</button>
+    <button class="tab-btn" data-target="logs-view">Журнал дій</button>
   </nav>
 
   <div id="passes-view" class="view active">
@@ -154,6 +158,18 @@
       </div>
     </div>
   </div>
-
+  <div id="logs-view" class="view">
+  <div class="main-container" style="justify-content: center;">
+    <div class="passes">
+      <h2>Історія подій</h2>
+      <table class="table" id="logsTable">
+        <thead>
+          <tr><th>Дата та час</th><th>Дія</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 </body>
 </html>

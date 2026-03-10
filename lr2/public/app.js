@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (targetId === 'users-view') loadUsers();
             if (targetId === 'passes-view') loadPasses();
+            if (targetId === 'logs-view') loadLogs();
         });
     });
 
