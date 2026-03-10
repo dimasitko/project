@@ -1,7 +1,6 @@
-const ApiError = require('../utils/ApiError');
+const ApiError = require("../utils/ApiError");
 
-const errorHandler = (err, req, res, next) => {
-
+const errorHandler = (err, req, res) => {
     if (err instanceof ApiError) {
         return res.status(err.status).json({
             error: {
@@ -10,7 +9,6 @@ const errorHandler = (err, req, res, next) => {
                 details: err.details
             }
         });
-        
     }
     console.error("Unhandled error:", err);
     return res.status(500).json({

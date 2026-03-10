@@ -1,4 +1,4 @@
-userForm.addEventListener('click', addUser);
+userForm.addEventListener('submit', addUser);
 
 if (usersTableBody) {
     usersTableBody.parentNode.addEventListener('click', (event) => {
