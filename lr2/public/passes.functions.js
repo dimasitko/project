@@ -27,7 +27,7 @@ function renderPassesTable(itemsToRender) {
             <td>${item.comment}</td>
             <td>
                 <div class="btn-group">
-                    <button class="edit-btn" data-id="${item.id}">Редаг.</button>
+                    <button class="edit-btn" data-id="${item.id}">Редагувати</button>
                     <button class="delete-btn" data-id="${item.id}">Видалити</button>
                 </div>
             </td>
@@ -80,7 +80,7 @@ function validatePassForm() {
     } else { document.getElementById('dateError').textContent = ''; dateInput.classList.remove('invalid'); }
 
     if (!adminInput.value.trim()) {
-        document.getElementById('adminError').textContent = 'Заповніть адміна'; adminInput.classList.add('invalid'); isValid = false;
+        document.getElementById('adminError').textContent = 'Заповніть поле'; adminInput.classList.add('invalid'); isValid = false;
     } else { document.getElementById('adminError').textContent = ''; adminInput.classList.remove('invalid'); }
     
     return isValid;

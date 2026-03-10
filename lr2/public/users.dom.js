@@ -4,3 +4,6 @@ const userRoleSelect = document.getElementById('userRoleSelect');
 const usersTableBody = document.querySelector('#usersTable tbody');
 const userNameError = document.getElementById('userNameError');
 const userRoleError = document.getElementById('userRoleError');
+const submitUserBtn = document.getElementById('submitUserBtn');
+const userSearchInput = document.getElementById('userSearchInput');
+const userRoleSearch = document.getElementById('userRoleSearch');

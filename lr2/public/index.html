@@ -73,7 +73,7 @@
       <table class="table" id="passesTable">
         <div class="filters">
           <div class="search">
-            <input id="searchInput" type="text" name="searchName" placeholder="Ім'я користувача" required />
+            <input id="searchInput" type="text" name="searchName" placeholder="Пошук за ім'ям..." required />
             <p class="error-text" id="searchError"></p>
           </div>
           <div class="group">
@@ -93,6 +93,7 @@
             <th>Дійсний до</th>
             <th>Адміністратор</th>
             <th>Коментар</th>
+            <th>Дії</th>
           </tr>
         </thead>
         <tbody>
@@ -131,6 +132,19 @@
 
       <div class="passes">
         <h2>Список користувачів</h2>
+        <div class="filters">
+          <div class="search">
+            <input id="userSearchInput" type="text" placeholder="Пошук за ім'ям..." />
+          </div>
+          <div class="group">
+            <select id="userRoleSearch">
+              <option value="Всі">Всі</option>
+              <option value="Студент">Студент</option>
+              <option value="Вчитель">Вчитель</option>
+              <option value="Адміністратор">Адміністратор</option>
+            </select>
+          </div>
+        </div>
         <table class="table" id="usersTable">
           <thead>
             <tr><th>Ім'я</th><th>Роль</th><th>Дії</th></tr>

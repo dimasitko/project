@@ -4,7 +4,18 @@ const ApiError = require("../utils/ApiError");
 
 class UsersService {
     getAllUsers(query) {
-        return repository.getAll();
+        let users = repository.getAll();
+
+        // Фільтрація
+        if (query.role && query.role !== "Всі") {
+            users = users.filter((u) => u.role === query.role);
+        }
+        if (query.search) {
+            users = users.filter((u) =>
+                u.name.toLowerCase().includes(query.search.toLowerCase())
+            );
+        }
+        return users;
     }
 
     getUserById(id) {
