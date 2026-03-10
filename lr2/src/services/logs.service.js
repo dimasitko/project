@@ -10,7 +10,7 @@ class LogsService {
         const log = {
             id: uuidv4(),
             action: createDto.action.trim(),
-            time: new Date().toISOString()
+            timestamp: new Date().toISOString()
         };
         return repository.add(log);
     }

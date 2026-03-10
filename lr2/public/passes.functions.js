@@ -18,11 +18,18 @@ async function loadPasses() {
 }
 
 function renderPassesTable(itemsToRender) {
-    passesTableBody.innerHTML = itemsToRender.map(item => `
+    passesTableBody.innerHTML = itemsToRender.map(item => {
+        const date = new Date(item.date);
+        const formattedDate = date.toLocaleString('uk-UA', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+    });
+    return `
         <tr>
             <td>${item.name}</td>
             <td>${item.status}</td>
-            <td>${item.date}</td>
+            <td>${formattedDate}</td>
             <td>${item.admin}</td>
             <td>${item.comment}</td>
             <td>
@@ -32,7 +39,8 @@ function renderPassesTable(itemsToRender) {
                 </div>
             </td>
         </tr>
-    `).join("");
+    `;
+}).join("");
 }
 
 async function addPass(event) {
@@ -58,8 +66,10 @@ async function addPass(event) {
         });
         
         if (response.ok) { 
+            const userName = document.getElementById('nameInput').value.trim();
+            const adminName = document.getElementById('adminInput').value.trim();
             const action = editPassId ? 'оновив' : 'додав';
-            createLog(`Адміністратор '${adminName}' ${action} пропуск користувача '${userName}'`);
+            createLog(`Адміністратор ${adminName} ${action} пропуск користувача ${userName}`);
             await loadPasses(); 
             clearPassForm(); 
         }
@@ -98,11 +108,11 @@ function clearPassForm(event) {
 }
 
 async function deletePass(id) {
-    const pass = passesList.find(p => String(p.id) === String(id));
+    const pass = passItems.find(p => String(p.id) === String(id));
     try {
         const response = await fetch(`${PASSES_API_URL}/${id}`, { method: 'DELETE' });
         if (response.ok){
-           if (pass) createLog(`Видалено пропуск користувача '${pass.name}'`);
+           if (pass) createLog(`Видалено пропуск користувача ${pass.name}`);
              await loadPasses();
         }
     } catch (error) { console.error('Помилка видалення:', error); }

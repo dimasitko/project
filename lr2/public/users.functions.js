@@ -61,7 +61,7 @@ async function addUser(event) {
 
         if (response.ok) {
             const action = editUserId ? 'Оновлено' : 'Додано нового';
-            createLog(`${action} користувача (${userData.role}) '${userData.name}'`);
+            createLog(`${action} користувача ${userData.role} '${userData.name}'`);
             await loadUsers();
             clearUserForm();
         }
@@ -112,7 +112,7 @@ async function deleteUser(id) {
     try {
         const response = await fetch(`${USERS_API_URL}/${id}`, { method: 'DELETE' });
         if (response.ok){
-            if (user) createLog(`Видалено користувача (${user.role}) '${user.name}'`);
+            if (user) createLog(`Видалено користувача ${user.role} ${user.name}`);
             await loadUsers();
         }
     } catch (error) { console.error('Помилка видалення:', error); }

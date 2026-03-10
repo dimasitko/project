@@ -12,12 +12,22 @@ async function loadLogs() {
 
 function renderLogsTable(logs) {
     if (!logsTableBody) return;
-    logsTableBody.innerHTML = logs.map(log => `
-        <tr>
-            <td>${new Date(log.timestamp).toLocaleString('uk-UA')}</td>
-            <td>${log.action}</td>
-        </tr>
-    `).join('');
+    logsTableBody.innerHTML = logs.map(log => {
+        const date = new Date(log.time);
+        const formattedDate = date.toLocaleString('uk-UA', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+    });
+       return `
+            <tr>
+                <td>${formattedDate}</td>
+                <td>${log.action}</td>
+            </tr>
+        `;
+    }).join('');
 }
 
 async function createLog(actionMessage) {

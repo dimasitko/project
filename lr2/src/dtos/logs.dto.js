@@ -23,7 +23,7 @@ class LogResponseDto {
     constructor(log) {
         this.id = log.id;
         this.action = log.action;
-        this.time = log.time;   
+        this.timestamp = log.timestamp;   
     }
 }
 
