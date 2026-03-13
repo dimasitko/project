@@ -16,6 +16,5 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetId === 'logs-view') loadLogs();
         });
     });
-
-    
+    document.querySelector('.tab-btn.active')?.click();  
 });
