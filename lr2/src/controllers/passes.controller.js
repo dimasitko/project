@@ -1,5 +1,5 @@
 const service = require("../services/passes.service");
-const {PassResponseDto } = require("../dtos/passes.dto");
+const { PassResponseDto } = require("../dtos/passes.dto");
 
 class PassesController {
     getAll(req, res, next) {

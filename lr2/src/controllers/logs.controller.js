@@ -1,5 +1,5 @@
 const service = require("../services/logs.service");
-const {LogResponseDto } = require("../dtos/logs.dto");
+const { LogResponseDto } = require("../dtos/logs.dto");
 
 class LogsController {
     getAll(req, res, next) {
