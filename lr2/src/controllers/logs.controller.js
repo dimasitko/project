@@ -1,5 +1,5 @@
 const service = require("../services/logs.service");
-const { CreateLogDto, LogResponseDto } = require("../dtos/logs.dto");
+const {LogResponseDto } = require("../dtos/logs.dto");
 
 class LogsController {
     getAll(req, res, next) {
@@ -13,8 +13,7 @@ class LogsController {
 
     create(req, res, next) {
         try {
-            const dto = new CreateLogDto(req.body).validate();
-            const newLog = service.createLog(dto);
+            const newLog = service.createLog(req.body);
             res.status(201).json(new LogResponseDto(newLog));
         } catch (error) {
             next(error);

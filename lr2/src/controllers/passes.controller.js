@@ -1,5 +1,5 @@
 const service = require("../services/passes.service");
-const { CreatePassDto, UpdatePassDto, PassResponseDto } = require("../dtos/passes.dto");
+const {PassResponseDto } = require("../dtos/passes.dto");
 
 class PassesController {
     getAll(req, res, next) {
@@ -22,8 +22,7 @@ class PassesController {
 
     create(req, res, next) {
         try {
-            const dto = new CreatePassDto(req.body).validate();
-            const newPass = service.createPass(dto);
+            const newPass = service.createPass(req.body);
             res.status(201).json(new PassResponseDto(newPass));
         } catch (error) {
             next(error);
@@ -32,8 +31,7 @@ class PassesController {
 
     update(req, res, next) {
         try {
-            const patchDto = new UpdatePassDto(req.body).validate();
-            const updatedPass = service.updatePass(req.params.id, patchDto);
+            const updatedPass = service.updatePass(req.params.id, req.body);
             res.status(200).json(new PassResponseDto(updatedPass));
         } catch (error) {
             next(error);
@@ -42,8 +40,7 @@ class PassesController {
 
     patch(req, res, next) {
         try {
-            const patchDto = new UpdatePassDto(req.body).validate();
-            const updatedPass = service.patchPass(req.params.id, patchDto);
+            const updatedPass = service.patchPass(req.params.id, req.body);
             res.status(200).json(new PassResponseDto(updatedPass));
         } catch (error) {
             next(error);

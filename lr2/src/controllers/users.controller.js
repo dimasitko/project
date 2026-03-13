@@ -1,5 +1,5 @@
 const service = require("../services/users.service");
-const { CreateUserDto, UpdateUserDto, UserResponseDto } = require("../dtos/users.dto");
+const { UserResponseDto } = require("../dtos/users.dto");
 
 class UsersController {
     getAll(req, res, next) {
@@ -22,8 +22,7 @@ class UsersController {
 
     create(req, res, next) {
         try {
-            const dto = new CreateUserDto(req.body).validate();
-            const newUser = service.createUser(dto);
+            const newUser = service.createUser(req.body);
             res.status(201).json(new UserResponseDto(newUser));
         } catch (error) {
             next(error);
@@ -32,8 +31,7 @@ class UsersController {
 
     update(req, res, next) {
         try {
-            const patchDto = new UpdateUserDto(req.body).validate();
-            const updatedUser = service.updateUser(req.params.id, patchDto);
+            const updatedUser = service.updateUser(req.params.id, req.body);
             res.status(200).json(new UserResponseDto(updatedUser));
         } catch (error) {
             next(error);
