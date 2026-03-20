@@ -1,32 +1,37 @@
-const { v4: uuidv4 } = require("uuid");
-const repository = require("../repositories/passes.repository");
-const ApiError = require("../utils/ApiError");
+import { v4 as uuidv4 } from "uuid";
+import repository from "../repositories/passes.repository";
+import { CreatePassDto, UpdatePassDto, Pass } from "../dtos/passes.dto";
+import ApiError from "../utils/ApiError";
+
+interface PassesQuery {
+    status?: string;
+    search?: string;
+}
 
 class PassesService {
-    getAllPasses(query) {
+    getAllPasses(query: PassesQuery): Pass[] {
         let passes = repository.getAll();
 
-        // Фільтрація
         if (query.status && query.status !== "Всі") {
             passes = passes.filter((p) => p.status === query.status);
         }
         if (query.search) {
             passes = passes.filter((p) =>
-                p.name.toLowerCase().includes(query.search.toLowerCase())
+                p.name.toLowerCase().includes(query.search!.toLowerCase())
             );
         }
+
         return passes;
     }
 
-    getPassById(id) {
+    getPassById(id: string): Pass {
         const pass = repository.getById(id);
-
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
         return pass;
     }
 
-    createPass(createDto) {
-        const pass = {
+    createPass(createDto: CreatePassDto): Pass {
+        const pass: Pass = {
             id: uuidv4(),
             name: createDto.name.trim(),
             status: createDto.status,
@@ -37,32 +42,33 @@ class PassesService {
         return repository.add(pass);
     }
 
-    updatePass(id, updateDto) {
+    updatePass(id: string, updateDto: UpdatePassDto): Pass {
         const pass = repository.getById(id);
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
 
-        const mergedData = { ...pass, ...updateDto };
-        return repository.update(id, mergedData);
+        const mergedData: Pass = { ...pass, ...updateDto };
+        return repository.update(id, mergedData) as Pass;
     }
 
-    patchPass(id, patchDto) {
+    patchPass(id: string, patchDto: UpdatePassDto): Pass {
         const pass = repository.getById(id);
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
 
-        const patchedData = {};
+        const patchedData: Partial<Pass> = {};
         if (patchDto.name !== undefined) patchedData.name = patchDto.name.trim();
         if (patchDto.status !== undefined) patchedData.status = patchDto.status;
         if (patchDto.date !== undefined) patchedData.date = patchDto.date;
         if (patchDto.admin !== undefined) patchedData.admin = patchDto.admin.trim();
         if (patchDto.comment !== undefined) patchedData.comment = patchDto.comment.trim();
 
-        return repository.update(id, { ...pass, ...patchedData });
+        return repository.update(id, { ...pass, ...patchedData }) as Pass;
     }
 
-    deletePass(id) {
+    deletePass(id: string): void {
         const pass = repository.getById(id);
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
         repository.delete(id);
     }
 }
-module.exports = new PassesService();
+
+export default new PassesService();

@@ -1,21 +1,25 @@
-const ApiError = require("../utils/ApiError");
+import { Request, Response, NextFunction } from "express";
+import ApiError from "../utils/ApiError";
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
     if (err instanceof ApiError) {
-        return res.status(err.status).json({
+        res.status(err.status).json({
             error: {
                 code: err.code,
                 message: err.message,
                 details: err.details
             }
         });
+        return;
     }
+
     console.error("Unhandled error:", err);
-    return res.status(500).json({
+    res.status(500).json({
         error: {
             code: "INTERNAL_SERVER_ERROR",
             message: "Щось пішло не так на сервері"
         }
     });
 };
-module.exports = errorHandler;
+
+export default errorHandler;

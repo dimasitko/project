@@ -1,17 +1,18 @@
-const service = require("../services/users.service");
-const { UserResponseDto } = require("../dtos/users.dto");
+import { Request, Response, NextFunction } from "express";
+import service from "../services/users.service";
+import { UpdateUserDto, UserResponseDto } from "../dtos/users.dto";
 
 class UsersController {
-    getAll(req, res, next) {
+    getAll(req: Request, res: Response, next: NextFunction): void {
         try {
-            const users = service.getAllUsers(req.query);
+            const users = service.getAllUsers(req.query as { role?: string; search?: string });
             res.status(200).json({ items: users, total: users.length });
         } catch (error) {
             next(error);
         }
     }
 
-    getById(req, res, next) {
+    getById(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
         try {
             const user = service.getUserById(req.params.id);
             res.status(200).json({ user });
@@ -20,7 +21,7 @@ class UsersController {
         }
     }
 
-    create(req, res, next) {
+    create(req: Request, res: Response, next: NextFunction): void {
         try {
             const newUser = service.createUser(req.body);
             res.status(201).json(new UserResponseDto(newUser));
@@ -29,16 +30,16 @@ class UsersController {
         }
     }
 
-    update(req, res, next) {
+    update(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
         try {
-            const updatedUser = service.updateUser(req.params.id, req.body);
+            const updatedUser = service.updateUser(req.params.id, req.body as UpdateUserDto);
             res.status(200).json(new UserResponseDto(updatedUser));
         } catch (error) {
             next(error);
         }
     }
 
-    delete(req, res, next) {
+    delete(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
         try {
             service.deleteUser(req.params.id);
             res.status(204).send();
@@ -47,4 +48,5 @@ class UsersController {
         }
     }
 }
-module.exports = new UsersController();
+
+export default new UsersController();

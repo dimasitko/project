@@ -1,10 +1,19 @@
-const ApiError = require("../utils/ApiError");
+import ApiError from "../utils/ApiError";
 
-class CreateLogDto {
-    constructor(data) {
-        this.action = data.action;
+export interface ILog {
+    id: string;
+    action: string;
+    timestamp: string;
+}
+
+export class CreateLogDto {
+    action: string;
+
+    constructor(data: Record<string, unknown>) {
+        this.action = data.action as string;
     }
-    validate() {
+
+    validate(): this {
         const errors = [];
 
         if (!this.action || this.action.trim().length === 0) {
@@ -19,15 +28,14 @@ class CreateLogDto {
     }
 }
 
-class LogResponseDto {
-    constructor(log) {
+export class LogResponseDto {
+    id: string;
+    action: string;
+    timestamp: string;
+
+    constructor(log: ILog) {
         this.id = log.id;
         this.action = log.action;
         this.timestamp = log.timestamp;
     }
 }
-
-module.exports = {
-    CreateLogDto,
-    LogResponseDto
-};

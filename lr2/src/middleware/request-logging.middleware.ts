@@ -1,4 +1,6 @@
-const loggerMiddleware = (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+const loggerMiddleware = (req: Request, res: Response, next: NextFunction): void => {
     const start = Date.now();
     res.on("finish", () => {
         const ms = Date.now() - start;
@@ -6,4 +8,5 @@ const loggerMiddleware = (req, res, next) => {
     });
     next();
 };
-module.exports = loggerMiddleware;
+
+export default loggerMiddleware;
