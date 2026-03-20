@@ -13,7 +13,7 @@ async function loadLogs() {
 function renderLogsTable(logs) {
     if (!logsTableBody) return;
     logsTableBody.innerHTML = logs.map(log => {
-        const date = new Date(log.time);
+        const date = new Date(log.timestamp);
         const formattedDate = date.toLocaleString('uk-UA', {
             day: '2-digit',
             month: '2-digit',
