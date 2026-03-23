@@ -1,9 +1,8 @@
-﻿# LR2 — REST API без БД
+﻿# LR3
 
 ## Запуск
 
 ```bash
-cd lr2
 npm install
 npm run dev
 ```
