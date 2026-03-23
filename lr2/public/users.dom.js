@@ -8,3 +8,4 @@ const submitUserBtn = document.getElementById('submitUserBtn');
 const userSearchInput = document.getElementById('userSearchInput');
 const userRoleSearch = document.getElementById('userRoleSearch');
 const userEmailInput = document.getElementById('userEmailInput');
+const userEmailError = document.getElementById('userEmailError');

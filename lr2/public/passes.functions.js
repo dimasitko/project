@@ -46,43 +46,69 @@ function renderPassesTable(itemsToRender) {
 async function addPass(event) {
     event.preventDefault();
 
+    await loadUsers();
+
     const adminName = adminInput.value.trim();
-    const foundAdmin = usersList.find(u => u.name === adminName && u.role === 'Адміністратор');
-    
+    const foundAdmin = usersList.find(u => 
+        u.name === adminName && u.role === 'Адміністратор'
+    );
+     
     if (!foundAdmin) {
-        document.getElementById('adminError').textContent = 'Такого адміна не існує!';
+        document.getElementById('adminError').textContent = 'Адміна не існує!';
         adminInput.classList.add('invalid');
         return;
+    } else {
+        document.getElementById('adminError').textContent = '';
+        adminInput.classList.remove('invalid');
     }
 
     if (!validatePassForm()) return;
 
-    const userEmail = emailInput.value.trim();
-    let targetUser = usersList.find(u => u.email === userEmail);
+    const userEmail = emailInput.value.trim().toLowerCase();
+    const newName = nameInput.value.trim();
+    const newRole = statusSelect.value;
 
-    if (!targetUser) {
-        const userRes = await fetch('/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: nameInput.value.trim(),
-                email: userEmail,
-                role: statusSelect.value
-            })
-        });
-        if (userRes.ok) await loadUsers();
-    }
+    let targetUser = usersList.find(u => u.email.toLowerCase() === userEmail);
+    let userId;
+
+    try {
+        if (targetUser) {
+            const updateRes = await fetch(`${USERS_API_URL}/${targetUser.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: newName,
+                    email: targetUser.email,
+                    role: newRole
+                })
+            });
+            if (!updateRes.ok) throw new Error('Не вдалося оновити користувача');
+            userId = targetUser.id;
+        } else {
+            const createRes = await fetch(USERS_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: newName,
+                    email: userEmail,
+                    role: newRole
+                })
+            });
+            if (!createRes.ok) throw new Error('Не вдалося створити користувача');
+            const data = await createRes.json();
+            userId = data.id || data.item?.id;
+        }
+        await loadUsers();
 
     const passData = {
-        userName: nameInput.value.trim(),
+        userName: newName,
         userEmail: userEmail,
-        status: statusSelect.value,
+        status: newRole,
         date: dateInput.value, 
         adminId: foundAdmin.id, 
         comment: commentInput.value.trim()
     };
 
-    try {
         const url = editPassId ? `${PASSES_API_URL}/${editPassId}` : PASSES_API_URL;
         const method = editPassId ? 'PUT' : 'POST';
         
@@ -100,7 +126,9 @@ async function addPass(event) {
             await loadPasses(); 
             clearPassForm(); 
         }
-    } catch (error) { console.error('Помилка збереження:', error); }
+    } catch (error) { 
+        console.error('Помилка збереження:', error);
+     }
 }
 
 function validatePassForm() {
@@ -113,6 +141,15 @@ function validatePassForm() {
     if (!statusSelect.value) {
         document.getElementById('statusError').textContent = 'Оберіть причину'; statusSelect.classList.add('invalid'); isValid = false;
     } else { document.getElementById('statusError').textContent = ''; statusSelect.classList.remove('invalid'); }
+    
+    if (!emailInput.value.trim()) {
+        emailError.textContent = "Заповніть Email!";
+        emailInput.classList.add('invalid');
+        isValid = false;
+    } else {
+        userEmailError.textContent = '';
+        userEmailInput.classList.remove('invalid');
+    }
 
     if (!dateInput.value) {
         document.getElementById('dateError').textContent = 'Оберіть дату'; dateInput.classList.add('invalid'); isValid = false;
@@ -122,6 +159,7 @@ function validatePassForm() {
         document.getElementById('adminError').textContent = 'Заповніть поле'; adminInput.classList.add('invalid'); isValid = false;
     } else { document.getElementById('adminError').textContent = ''; adminInput.classList.remove('invalid'); }
     
+
     return isValid;
 }
 
@@ -139,7 +177,7 @@ async function deletePass(id) {
     try {
         const response = await fetch(`${PASSES_API_URL}/${id}`, { method: 'DELETE' });
         if (response.ok){
-           if (pass) createLog(`Видалено пропуск користувача ${pass.name}`);
+           if (pass) createLog(`Видалено пропуск користувача ${pass.userName}`);
              await loadPasses();
         }
     } catch (error) { console.error('Помилка видалення:', error); }
@@ -148,9 +186,16 @@ async function deletePass(id) {
 function editPass(id) {
     const item = passItems.find(i => String(i.id) === String(id));
     if (item) {
-        nameInput.value = item.name.trim(); statusSelect.value = item.status;
-        dateInput.value = item.date; adminInput.value = item.admin.trim();
-        commentInput.value = item.comment; editPassId = id;
-        submitBtn.textContent = 'Зберегти'; nameInput.focus();
+        nameInput.value = item.userName.trim();
+        emailInput.value = item.userEmail.trim();
+        emailInput.readOnly = true; 
+        emailInput.style.backgroundColor = "#e9ecef";
+        statusSelect.value = item.status;
+        dateInput.value = item.date; 
+        adminName.value = item.admin.trim();
+        commentInput.value = item.comment; 
+        editPassId = id;
+        submitBtn.textContent = 'Зберегти'; 
+        nameInput.focus();
     }
 }

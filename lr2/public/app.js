@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    loadUsers();
+    
     const tabBtns = document.querySelectorAll('.tab-btn');
     const views = document.querySelectorAll('.view');
 

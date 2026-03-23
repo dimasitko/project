@@ -21,7 +21,7 @@ async function loadUsers() {
             usersList = data.items || data || []; 
             
             renderUsersTable(usersList);
-            updateDatalists(usersList);
+            updateAdminsDatalist(usersList);
         }
     } catch (error) { console.error('Помилка:', error); }
 }
@@ -43,6 +43,7 @@ function renderUsersTable(usersToRender) {
         <tr>
             <td>${user.name}</td>
             <td>${user.role}</td>
+            <td>${user.email}</td>
             <td>
                 <div class="btn-group">
                     <button class="edit-btn" data-id="${user.id}">Редагувати</button>
@@ -75,7 +76,7 @@ async function addUser(event) {
 
         if (response.ok) {
             const action = editUserId ? 'Оновлено' : 'Додано нового';
-            createLog(`${action} користувача ${userData.role} '${userData.name}'`);
+            createLog(`${action} користувача ${userData.role} ${userData.name}`);
             await loadUsers();
             clearUserForm();
         }
@@ -86,8 +87,12 @@ function clearUserForm() {
     userForm.reset();
     userNameInput.classList.remove('invalid');
     userRoleSelect.classList.remove('invalid');
+    userEmailInput.classList.remove('invalid');
     userNameError.textContent = '';
     userRoleError.textContent = '';
+    userEmailInput.textContent = '';
+    userEmailInput.readOnly = false;
+    userEmailInput.style.backgroundColor = "";
 
     editUserId = null;
     if (submitUserBtn) submitUserBtn.textContent = 'Зберегти користувача';
@@ -97,6 +102,7 @@ function clearUserForm() {
 
 function validateUserForm() {
     let isValid = true;
+
     if (!userNameInput.value.trim()) {
         userNameError.textContent = "Заповніть ім'я";
         userNameInput.classList.add('invalid'); 
@@ -110,6 +116,15 @@ function validateUserForm() {
         userNameInput.classList.remove('invalid');
     }
 
+    if (!editUserId && !userEmailInput.value.trim()) {
+        userEmailError.textContent = "Заповніть Email!";
+        userEmailInput.classList.add('invalid');
+        isValid = false;
+    } else {
+        userEmailError.textContent = '';
+        userEmailInput.classList.remove('invalid');
+    }
+
     if (!userRoleSelect.value) {
         userRoleError.textContent = "Оберіть роль";
         userRoleSelect.classList.add('invalid'); 
@@ -118,7 +133,34 @@ function validateUserForm() {
         userRoleError.textContent = ''; 
         userRoleSelect.classList.remove('invalid');
     }
+
     return isValid;
+}
+
+function updateAdminsDatalist(users) {
+    const adminsDl = document.getElementById('adminsDatalist');
+    if (!adminsDl) return;
+
+    adminsDl.innerHTML = users
+        .filter(u => u.role === 'Адміністратор')
+        .map(u => `<option value="${u.name}">`)
+        .join('');
+}
+
+function updateUsersDatalist(query) {
+    const usersDl = document.getElementById('usersDatalist');
+    if (!usersDl) return;
+
+    if (query.length < 2) {
+        usersDl.innerHTML = '';
+        return;
+    }
+
+    const matches = usersList.filter(u => 
+        u.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    usersDl.innerHTML = matches.map(u => `<option value="${u.name}">`).join('');
 }
 
 async function deleteUser(id) {
@@ -137,6 +179,10 @@ function editUser(id) {
     if (user) {
         userNameInput.value = user.name.trim();
         userRoleSelect.value = user.role;
+        userEmailInput.value = user.email;
+        userEmailInput.readOnly = true; 
+        userEmailInput.style.backgroundColor = "#e9ecef";
+
         editUserId = id;
         if (submitUserBtn) submitUserBtn.textContent = 'Зберегти зміни';
         userNameInput.focus();

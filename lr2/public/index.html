@@ -34,14 +34,14 @@
       </caption>
       <div class="name">
         <label for="nameInput">Введіть ваше ім'я</label>
-        <input id="nameInput" type="text" name="userName" placeholder="Іванов Іван" required />
+        <input id="nameInput" type="text" name="userName" list="usersDatalist" autocomplete="off" placeholder="Іванов Іван" required />
         <datalist id="usersDatalist"></datalist>
         <p class="error-text" id="nameError"></p>
       </div>
 
       <div class="name">
         <label for="emailInput">Email користувача</label>
-        <input id="emailInput" type="email" placeholder="student@gmail.com" required />
+        <input id="emailInput" type="email" autocomplete="off" placeholder="student@gmail.com" required />
         <p class="error-text" id="emailError"></p>
       </div>
 
@@ -64,7 +64,7 @@
 
       <div class="name">
         <label for="adminInput">Ім'я Адміністратора</label>
-        <input id="adminInput" type="text" name="adminName" placeholder="Прізвище Ім'я" required />
+        <input id="adminInput" type="text" name="adminName" list="adminsDatalist" autocomplete="off" placeholder="Прізвище Ім'я" required />
         <datalist id="adminsDatalist"></datalist>
         <p class="error-text" id="adminError"></p>
       </div>
@@ -86,7 +86,7 @@
       <table class="table" id="passesTable">
         <div class="filters">
           <div class="search">
-            <input id="searchInput" type="text" name="searchName" placeholder="Пошук за ім'ям..." required />
+            <input id="searchInput" type="text" name="searchName" autocomplete="off" placeholder="Пошук за ім'ям..." required />
             <p class="error-text" id="searchError"></p>
           </div>
           <div class="group">
@@ -127,12 +127,12 @@
         <h2>Додати користувача</h2>
         <div class="group">
           <label>Ім'я</label>
-          <input id="userNameInput" type="text" placeholder="Іван Іванов" required />
+          <input id="userNameInput" type="text" autocomplete="off" placeholder="Іван Іванов" required />
           <p class="error-text" id="userNameError"></p>
         </div>
         <div class="group">
           <label>Email</label>
-          <input id="userEmailInput" type="email" placeholder="student@gmail.com" required /> <p class="error-text" id="userEmailError"></p>
+          <input id="userEmailInput" type="email" autocomplete="off" placeholder="student@gmail.com" required /> <p class="error-text" id="userEmailError"></p>
         </div>
         <div class="group">
           <label>Роль</label>
@@ -152,7 +152,7 @@
         <h2>Список користувачів</h2>
         <div class="filters">
           <div class="search">
-            <input id="userSearchInput" type="text" placeholder="Пошук за ім'ям..." />
+            <input id="userSearchInput" type="text" autocomplete="off" placeholder="Пошук за ім'ям..." />
           </div>
           <div class="group">
             <select id="userRoleSearch">
@@ -166,7 +166,7 @@
         </div>
         <table class="table" id="usersTable">
           <thead>
-            <tr><th>Ім'я</th><th>Роль</th><th>Дії</th></tr>
+            <tr><th>Ім'я</th><th>Роль</th><th>Email</th><th>Дії</th></tr>
           </thead>
           <tbody></tbody>
         </table>

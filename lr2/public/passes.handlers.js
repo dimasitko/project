@@ -9,3 +9,9 @@ if (passesTableBody) {
         if (event.target.classList.contains('edit-btn')) editPass(event.target.dataset.id);
     });
 }
+
+if (nameInput) {
+    nameInput.addEventListener('input', (e) => {
+        updateUsersDatalist(e.target.value);
+    });
+}
