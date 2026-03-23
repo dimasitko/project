@@ -8,7 +8,7 @@ export interface User {
     createdAt: string;
 }
  
-const VALID_ROLES = ["Вчитель", "Студент", "Адміністратор"] as const;
+const VALID_ROLES = ["Вчитель", "Студент", "Адміністратор", "Техперсонал"] as const;
  
 export class CreateUserDto {
     email: string;

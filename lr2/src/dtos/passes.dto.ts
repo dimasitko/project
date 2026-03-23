@@ -11,7 +11,7 @@ export interface Pass {
     createdAt: string;
 }
  
-const VALID_STATUSES = ["Вчитель", "Студент", "Інше"] as const;
+const VALID_STATUSES = ["Вчитель", "Студент", "Техперсонал"] as const;
  
 export class CreatePassDto {
     userName: string;
