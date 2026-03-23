@@ -1,56 +1,48 @@
 import { Request, Response, NextFunction } from "express";
 import service from "../services/passes.service";
-import { UpdatePassDto, PassResponseDto } from "../dtos/passes.dto";
+import { CreatePassDto, UpdatePassDto } from "../dtos/passes.dto";
 
 class PassesController {
-    getAll(req: Request, res: Response, next: NextFunction): void {
+    async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const passes = service.getAllPasses(req.query as { status?: string; search?: string });
+            const passes = await service.getAllPasses(req.query);
             res.status(200).json({ items: passes, total: passes.length });
         } catch (error) {
             next(error);
         }
     }
-
-    getById(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
+    async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const pass = service.getPassById(req.params.id);
-            res.status(200).json({ pass });
+            const pass = await service.getPassById(String(req.params.id));
+            res.status(200).json({ data: pass });
         } catch (error) {
             next(error);
         }
     }
 
-    create(req: Request, res: Response, next: NextFunction): void {
+    async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const newPass = service.createPass(req.body);
-            res.status(201).json(new PassResponseDto(newPass));
+            const dto = new CreatePassDto(req.body).validate();
+            const newPass = await service.createPass(dto);
+            res.status(201).json({ data: newPass });
+        } catch (error) { 
+            next(error);
+        }
+    }
+
+    async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const dto = new UpdatePassDto(req.body).validate();
+            const updatedPass = await service.updatePass(String(req.params.id), dto);
+            res.status(200).json({ data: updatedPass });
         } catch (error) {
             next(error);
         }
     }
 
-    update(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
+    async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const updatedPass = service.updatePass(req.params.id, req.body as UpdatePassDto);
-            res.status(200).json(new PassResponseDto(updatedPass));
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    patch(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
-        try {
-            const updatedPass = service.patchPass(req.params.id, req.body as UpdatePassDto);
-            res.status(200).json(new PassResponseDto(updatedPass));
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    delete(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
-        try {
-            service.deletePass(req.params.id);
+            await service.deletePass(String(req.params.id));
             res.status(204).send();
         } catch (error) {
             next(error);

@@ -1,21 +1,22 @@
 import { Request, Response, NextFunction } from "express";
 import service from "../services/logs.service";
-import { CreateLogDto, LogResponseDto } from "../dtos/logs.dto";
+import { CreateLogDto} from "../dtos/logs.dto";
 
 class LogsController {
-    getAll(req: Request, res: Response, next: NextFunction): void {
+    async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const logs = service.getAllLogs();
+            const logs = await service.getAllLogs();
             res.status(200).json({ items: logs, total: logs.length });
         } catch (error) {
             next(error);
         }
     }
 
-    create(req: Request, res: Response, next: NextFunction): void {
+    async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const newLog = service.createLog(req.body as CreateLogDto);
-            res.status(201).json(new LogResponseDto(newLog));
+            const dto = new CreateLogDto(req.body).validate();
+            const newLog = await service.createLog(dto);
+            res.status(201).json({ data: newLog });
         } catch (error) {
             next(error);
         }

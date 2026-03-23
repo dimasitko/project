@@ -1,47 +1,49 @@
 import { Request, Response, NextFunction } from "express";
 import service from "../services/users.service";
-import { UpdateUserDto, UserResponseDto } from "../dtos/users.dto";
+import { UpdateUserDto, CreateUserDto } from "../dtos/users.dto";
 
 class UsersController {
-    getAll(req: Request, res: Response, next: NextFunction): void {
+    async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const users = service.getAllUsers(req.query as { role?: string; search?: string });
+            const users = await service.getAllUsers(req.query);
             res.status(200).json({ items: users, total: users.length });
         } catch (error) {
             next(error);
         }
     }
 
-    getById(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
+    async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user = service.getUserById(req.params.id);
-            res.status(200).json({ user });
+            const user = await service.getUserById(String(req.params.id));
+            res.status(200).json({ data: user });
         } catch (error) {
             next(error);
         }
     }
 
-    create(req: Request, res: Response, next: NextFunction): void {
+    async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const newUser = service.createUser(req.body);
-            res.status(201).json(new UserResponseDto(newUser));
+            const dto = new CreateUserDto(req.body).validate();
+            const newUser = await service.createUser(dto);
+            res.status(201).json({ data: newUser });
         } catch (error) {
             next(error);
         }
     }
 
-    update(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
+    async update(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const updatedUser = service.updateUser(req.params.id, req.body as UpdateUserDto);
-            res.status(200).json(new UserResponseDto(updatedUser));
+            const dto = new UpdateUserDto(req.body).validate();
+            const updatedUser = await service.updateUser(String(req.params.id), dto);
+            res.status(200).json({ data: updatedUser });
         } catch (error) {
             next(error);
         }
     }
 
-    delete(req: Request<{ id: string }>, res: Response, next: NextFunction): void {
+    async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            service.deleteUser(req.params.id);
+            await service.deleteUser(String(req.params.id));
             res.status(204).send();
         } catch (error) {
             next(error);

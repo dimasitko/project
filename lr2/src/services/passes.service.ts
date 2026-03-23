@@ -1,73 +1,54 @@
-import { v4 as uuidv4 } from "uuid";
 import repository from "../repositories/passes.repository";
+import usersRepository from "../repositories/users.repository";
 import { CreatePassDto, UpdatePassDto, Pass } from "../dtos/passes.dto";
 import ApiError from "../utils/ApiError";
 
-interface PassesQuery {
-    status?: string;
-    search?: string;
-}
-
 class PassesService {
-    getAllPasses(query: PassesQuery): Pass[] {
-        let passes = repository.getAll();
-
-        if (query.status && query.status !== "Всі") {
-            passes = passes.filter((p) => p.status === query.status);
-        }
-        if (query.search) {
-            passes = passes.filter((p) =>
-                p.name.toLowerCase().includes(query.search!.toLowerCase())
-            );
-        }
-
-        return passes;
+    async getAllPasses(query: { status?: string; search?: string }): Promise<any[]> {
+        return await repository.getAll(query.status, query.search);
     }
 
-    getPassById(id: string): Pass {
-        const pass = repository.getById(id);
+    async getPassById(id: string): Promise<Pass> {
+        const pass = await repository.getById(Number(id));
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
         return pass;
     }
 
-    createPass(createDto: CreatePassDto): Pass {
-        const pass: Pass = {
-            id: uuidv4(),
-            name: createDto.name.trim(),
+    async createPass(createDto: CreatePassDto): Promise<Pass> {
+        let user = await usersRepository.getByEmail(createDto.userEmail);
+
+        if (!user) {
+            let mappedRole = "Студент";
+            if (createDto.status === "Вчитель") mappedRole = "Вчитель";
+            if (createDto.status === "Техперсонал") mappedRole = "Техперсонал";
+
+            user = await usersRepository.add({
+                email: createDto.userEmail,
+                name: createDto.userName,
+                role: mappedRole,
+                created_at: new Date().toISOString()
+            });
+        }
+
+        return await repository.add({
+            user_id: user.id,
+            admin_id: createDto.adminId,
             status: createDto.status,
             date: createDto.date,
-            admin: createDto.admin.trim(),
-            comment: createDto.comment ? createDto.comment.trim() : ""
-        };
-        return repository.add(pass);
+            comment: createDto.comment,
+            created_at: new Date().toISOString()
+        });
     }
 
-    updatePass(id: string, updateDto: UpdatePassDto): Pass {
-        const pass = repository.getById(id);
+    async updatePass(id: string, updateDto: UpdatePassDto): Promise<Pass> {
+        const pass = await repository.update(Number(id), updateDto);
         if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
-
-        const mergedData: Pass = { ...pass, ...updateDto };
-        return repository.update(id, mergedData) as Pass;
+        return pass;
     }
 
-    patchPass(id: string, patchDto: UpdatePassDto): Pass {
-        const pass = repository.getById(id);
-        if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
-
-        const patchedData: Partial<Pass> = {};
-        if (patchDto.name !== undefined) patchedData.name = patchDto.name.trim();
-        if (patchDto.status !== undefined) patchedData.status = patchDto.status;
-        if (patchDto.date !== undefined) patchedData.date = patchDto.date;
-        if (patchDto.admin !== undefined) patchedData.admin = patchDto.admin.trim();
-        if (patchDto.comment !== undefined) patchedData.comment = patchDto.comment.trim();
-
-        return repository.update(id, { ...pass, ...patchedData }) as Pass;
-    }
-
-    deletePass(id: string): void {
-        const pass = repository.getById(id);
-        if (!pass) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
-        repository.delete(id);
+    async deletePass(id: string): Promise<void> {
+        const isDeleted = await repository.delete(Number(id));
+        if (!isDeleted) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
     }
 }
 
