@@ -1,17 +1,16 @@
 import { Log } from "../dtos/logs.dto";
-
-const logs: Log[] = [];
+import { all, run, escapeSql } from "../db/dbClient";
 
 class LogsRepository {
-    getAll(): Log[] {
-        return [...logs].sort(
-            (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
+    async getAll(): Promise<Log[]> {
+        return await all<Log>("SELECT * FROM logs ORDER BY id DESC LIMIT 50;");
     }
-
-    add(log: Log): Log {
-        logs.push(log);
-        return log;
+    
+    async add(action: string, timestamp: string): Promise<Log> {
+        const sql = `INSERT INTO logs (action, timestamp) VALUES ('${escapeSql(action)}', '${timestamp}');`;
+        const result = await run(sql);
+        const rows = await all<Log>(`SELECT * FROM logs WHERE id = ${result.lastID};`);
+        return rows[0];
     }
 }
 
