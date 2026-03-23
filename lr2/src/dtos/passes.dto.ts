@@ -1,48 +1,54 @@
 import ApiError from "../utils/ApiError";
  
 export interface Pass {
-    id: string;
+    id: number;
+    user_id: number;
+    admin_id: number;
     name: string;
     status: string;
-    date: string;
-    admin: string;
+    date: string;  
     comment: string;
+    createdAt: string;
 }
  
 const VALID_STATUSES = ["Вчитель", "Студент", "Інше"] as const;
  
 export class CreatePassDto {
-    name: string;
+    userName: string;
+    userEmail: string;
+    adminId: number;
     status: string;
     date: string;
-    admin: string;
     comment?: string;
  
     constructor(data: Record<string, unknown>) {
-        this.name = data.name as string;
+        this.userName = data.userName as string;
+        this.userEmail = data.userEmail as string;
+        this.adminId = Number(data.adminId);
         this.status = data.status as string;
         this.date = data.date as string;
-        this.admin = data.admin as string;
         this.comment = data.comment as string | undefined;
     }
  
     validate(): this {
         const errors = [];
  
-        if (!this.name || this.name.trim().length === 0)
+        if (!this.userName || this.userName.trim().length === 0)
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
-        if (this.name && this.name.length > 20)
+        if (this.userName && this.userName.length > 20)
             errors.push({ field: "name", message: "Максимум 20 символів" });
+
+        if (!this.userEmail || !this.userEmail.includes("@")) 
+            errors.push({ field: "userEmail", message: "Коректний email обов'язковий" });
  
         if (!VALID_STATUSES.includes(this.status as (typeof VALID_STATUSES)[number]))
             errors.push({ field: "status", message: "Некоректна причина" });
  
-        if (!this.date) errors.push({ field: "date", message: "Оберіть дату" });
+        if (!this.date) 
+            errors.push({ field: "date", message: "Оберіть дату" });
  
-        if (!this.admin || this.admin.trim().length === 0)
-            errors.push({ field: "admin", message: "Ім'я адміністратора обов'язкове" });
-        if (this.admin && this.admin.length > 20)
-            errors.push({ field: "admin", message: "Максимум 20 символів" });
+        if (!this.adminId || isNaN(this.adminId))
+            errors.push({ field: "adminId", message: "Оберіть адміністратора зі списку" });
  
         if (this.comment && this.comment.length > 35)
             errors.push({ field: "comment", message: "Максимум 35 символів" });
@@ -56,29 +62,19 @@ export class CreatePassDto {
 }
  
 export class UpdatePassDto {
-    name?: string;
     status?: string;
     date?: string;
-    admin?: string;
     comment?: string;
  
     constructor(data: Record<string, unknown>) {
-        if (data.name !== undefined) this.name = data.name as string;
         if (data.status !== undefined) this.status = data.status as string;
         if (data.date !== undefined) this.date = data.date as string;
-        if (data.admin !== undefined) this.admin = data.admin as string;
         if (data.comment !== undefined) this.comment = data.comment as string;
     }
  
     validate(): this {
         const errors = [];
  
-        if (this.name !== undefined) {
-            if (this.name.trim().length === 0)
-                errors.push({ field: "name", message: "Ім'я обов'язкове" });
-            if (this.name.length > 20)
-                errors.push({ field: "name", message: "Максимум 20 символів" });
-        }
         if (this.status !== undefined) {
             if (!VALID_STATUSES.includes(this.status as (typeof VALID_STATUSES)[number]))
                 errors.push({ field: "status", message: "Некоректна причина" });
@@ -86,17 +82,10 @@ export class UpdatePassDto {
         if (this.date !== undefined) {
             if (!this.date) errors.push({ field: "date", message: "Оберіть дату" });
         }
-        if (this.admin !== undefined) {
-            if (this.admin.trim().length === 0)
-                errors.push({ field: "admin", message: "Ім'я адміністратора обов'язкове" });
-            if (this.admin.length > 20)
-                errors.push({ field: "admin", message: "Максимум 20 символів" });
-        }
         if (this.comment !== undefined) {
             if (this.comment.length > 35)
                 errors.push({ field: "comment", message: "Максимум 35 символів" });
         }
- 
         if (errors.length > 0) {
             throw new ApiError(400, "VALIDATION_ERROR", "Помилка валідації даних", errors);
         }
@@ -106,19 +95,21 @@ export class UpdatePassDto {
 }
  
 export class PassResponseDto {
-    id: string;
-    name: string;
+    id: number;
+    user_id: number;
+    admin_id: number;
     status: string;
     date: string;
-    admin: string;
     comment: string;
+    createdAt: string;
  
     constructor(pass: Pass) {
         this.id = pass.id;
-        this.name = pass.name;
+        this.user_id = pass.user_id;
+        this.admin_id = pass.admin_id;
         this.status = pass.status;
         this.date = pass.date;
-        this.admin = pass.admin;
         this.comment = pass.comment;
+        this.createdAt = pass.createdAt;
     }
 }

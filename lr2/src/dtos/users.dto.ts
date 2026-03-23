@@ -1,25 +1,32 @@
 import ApiError from "../utils/ApiError";
  
 export interface User {
-    id: string;
+    id: number;
+    email: string;
     name: string;
     role: string;
+    createdAt: string;
 }
  
 const VALID_ROLES = ["Вчитель", "Студент", "Адміністратор"] as const;
  
 export class CreateUserDto {
+    email: string;
     name: string;
     role: string;
  
     constructor(data: Record<string, unknown>) {
+        this.email = data.email as string;
         this.name = data.name as string;
         this.role = data.role as string;
     }
  
     validate(): this {
         const errors = [];
- 
+
+        if(!this.email || !this.email.includes("@"))
+            errors.push({ field: "email", message: "Введіть коректний email" });
+
         if (!this.name || this.name.trim().length === 0)
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
         if (this.name && this.name.length > 20)
@@ -68,13 +75,18 @@ export class UpdateUserDto {
 }
  
 export class UserResponseDto {
-    id: string;
+    id: number;
+    email: string;
     name: string;
     role: string;
+    createdAt: string;
+
  
     constructor(user: User) {
         this.id = user.id;
+        this.email = user.email;
         this.name = user.name;
         this.role = user.role;
+        this.createdAt = user.createdAt;
     }
 }

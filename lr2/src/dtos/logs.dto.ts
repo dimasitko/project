@@ -1,7 +1,7 @@
 import ApiError from "../utils/ApiError";
  
 export interface Log {
-    id: string;
+    id: number;
     action: string;
     timestamp: string;
 }
@@ -29,7 +29,7 @@ export class CreateLogDto {
 }
  
 export class LogResponseDto {
-    id: string;
+    id: number;
     action: string;
     timestamp: string;
  
