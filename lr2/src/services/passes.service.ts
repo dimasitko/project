@@ -50,6 +50,18 @@ class PassesService {
         const isDeleted = await repository.delete(Number(id));
         if (!isDeleted) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
     }
+    
+    async getStats(): Promise<unknown[]> {
+        return await repository.getStats();
+    }
+
+    async getPassesWithUsers(): Promise<unknown[]> {
+        return await repository.getPassesWithUsers();
+    }
+
+    async searchVulnerable(q: string): Promise<Pass[]> {
+        return await repository.searchVulnerable(q);
+    }
 }
 
 export default new PassesService();

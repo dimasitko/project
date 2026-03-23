@@ -48,6 +48,33 @@ class PassesController {
             next(error);
         }
     }
+    async getStats(_req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const stats = await service.getStats();
+            res.status(200).json({ data: stats });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getPassesWithUsers(_req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const passes = await service.getPassesWithUsers();
+            res.status(200).json({ data: passes });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async searchVulnerable(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const query = String(req.query.q || "");
+            const result = await service.searchVulnerable(query);
+            res.status(200).json({ data: result });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new PassesController();
