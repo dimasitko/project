@@ -3,7 +3,7 @@ import { all, get, run, escapeSql } from "../db/dbClient";
 
 class PassesRepository {
     async getAll(status?: string, search?: string): Promise<any[]> {
-    let sql = `SELECT p.id, p.status, p.date, p.comment, p.created_at, u.name as name, u.email as userEmail, a.name as admin FROM passes p JOIN users u ON p.user_id = u.id JOIN users a ON p.admin_id = a.id WHERE 1=1`;
+    let sql = `SELECT p.id, p.status, p.date, p.comment, p.created_at, u.name as userName, u.email as userEmail, a.name as adminName FROM passes p JOIN users u ON p.user_id = u.id JOIN users a ON p.admin_id = a.id WHERE 1=1`;
     if (status && status !== "Всі") sql += ` AND p.status = '${escapeSql(status)}'`;
     if (search) sql += ` AND u.name LIKE '%${escapeSql(search)}%'`;
     return await all(sql + " ORDER BY p.id DESC LIMIT 100;");
