@@ -42,6 +42,11 @@ input.invalid, select.invalid, textarea.invalid {
     margin-top: 5px;
 }
 
+#adminInput.invalid {
+    border: 2px solid red;
+    background-color: #fff5f5;
+}
+
 
 /* Форма*/
 #form {

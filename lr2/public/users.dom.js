@@ -7,3 +7,4 @@ const userRoleError = document.getElementById('userRoleError');
 const submitUserBtn = document.getElementById('submitUserBtn');
 const userSearchInput = document.getElementById('userSearchInput');
 const userRoleSearch = document.getElementById('userRoleSearch');
+const userEmailInput = document.getElementById('userEmailInput');

@@ -27,10 +27,10 @@ function renderPassesTable(itemsToRender) {
     });
     return `
         <tr>
-            <td>${item.name}</td>
+            <td>${item.userName}</td>
             <td>${item.status}</td>
             <td>${formattedDate}</td>
-            <td>${item.admin}</td>
+            <td>${item.adminName}</td>
             <td>${item.comment}</td>
             <td>
                 <div class="btn-group">
@@ -45,13 +45,40 @@ function renderPassesTable(itemsToRender) {
 
 async function addPass(event) {
     event.preventDefault();
+
+    const adminName = adminInput.value.trim();
+    const foundAdmin = usersList.find(u => u.name === adminName && u.role === 'Адміністратор');
+    
+    if (!foundAdmin) {
+        document.getElementById('adminError').textContent = 'Такого адміна не існує!';
+        adminInput.classList.add('invalid');
+        return;
+    }
+
     if (!validatePassForm()) return;
 
+    const userEmail = emailInput.value.trim();
+    let targetUser = usersList.find(u => u.email === userEmail);
+
+    if (!targetUser) {
+        const userRes = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: nameInput.value.trim(),
+                email: userEmail,
+                role: statusSelect.value
+            })
+        });
+        if (userRes.ok) await loadUsers();
+    }
+
     const passData = {
-        name: nameInput.value.trim(), 
+        userName: nameInput.value.trim(),
+        userEmail: userEmail,
         status: statusSelect.value,
         date: dateInput.value, 
-        admin: adminInput.value.trim(), 
+        adminId: foundAdmin.id, 
         comment: commentInput.value.trim()
     };
 
@@ -69,7 +96,7 @@ async function addPass(event) {
             const userName = document.getElementById('nameInput').value.trim();
             const adminName = document.getElementById('adminInput').value.trim();
             const action = editPassId ? 'оновив' : 'додав';
-            createLog(`Адміністратор ${adminName} ${action} пропуск користувача ${userName}`);
+            createLog(`Адміністратор ${foundAdmin.name} ${action} пропуск користувача ${passData.userName}`);
             await loadPasses(); 
             clearPassForm(); 
         }

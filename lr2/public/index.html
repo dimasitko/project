@@ -35,15 +35,23 @@
       <div class="name">
         <label for="nameInput">Введіть ваше ім'я</label>
         <input id="nameInput" type="text" name="userName" placeholder="Іванов Іван" required />
+        <datalist id="usersDatalist"></datalist>
         <p class="error-text" id="nameError"></p>
       </div>
+
+      <div class="name">
+        <label for="emailInput">Email користувача</label>
+        <input id="emailInput" type="email" placeholder="student@gmail.com" required />
+        <p class="error-text" id="emailError"></p>
+      </div>
+
       <div class="group">
         <label for="statusSelect">Причина</label>
         <select id="statusSelect" required>
           <option value="">Оберіть причину</option>
           <option value="Вчитель">Вчитель</option>
           <option value="Студент">Студент</option>
-          <option value="Інше">Інше</option>
+          <option value="Техперсонал">Техперсонал</option>
         </select>
         <p class="error-text" id="statusError"></p>
       </div>
@@ -57,6 +65,7 @@
       <div class="name">
         <label for="adminInput">Ім'я Адміністратора</label>
         <input id="adminInput" type="text" name="adminName" placeholder="Прізвище Ім'я" required />
+        <datalist id="adminsDatalist"></datalist>
         <p class="error-text" id="adminError"></p>
       </div>
 
@@ -85,7 +94,7 @@
               <option value="Всі" id="All">Всі причини</option>
               <option value="Вчитель" id="Teacher">Вчитель</option>
               <option value="Студент" id="Student">Студент</option>
-              <option value="Інше" id="Other">Інше</option>
+              <option value="Техперсонал" id="Personal">Техперсонал</option>
             </select>
             <p class="error-text" id="statusError"></p>
           </div>
@@ -118,8 +127,12 @@
         <h2>Додати користувача</h2>
         <div class="group">
           <label>Ім'я</label>
-          <input id="userNameInput" type="text" required />
+          <input id="userNameInput" type="text" placeholder="Іван Іванов" required />
           <p class="error-text" id="userNameError"></p>
+        </div>
+        <div class="group">
+          <label>Email</label>
+          <input id="userEmailInput" type="email" placeholder="student@gmail.com" required /> <p class="error-text" id="userEmailError"></p>
         </div>
         <div class="group">
           <label>Роль</label>
@@ -128,6 +141,7 @@
             <option value="Студент">Студент</option>
             <option value="Вчитель">Вчитель</option>
             <option value="Адміністратор">Адміністратор</option>
+            <option value="Техперсонал">Техперсонал</option>
           </select>
           <p class="error-text" id="userRoleError"></p>
         </div>
@@ -146,6 +160,7 @@
               <option value="Студент">Студент</option>
               <option value="Вчитель">Вчитель</option>
               <option value="Адміністратор">Адміністратор</option>
+              <option value="Техперсонал">Техперсонал</option>
             </select>
           </div>
         </div>

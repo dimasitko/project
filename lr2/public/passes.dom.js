@@ -9,3 +9,4 @@ const statusSelect = document.getElementById('statusSelect');
 const dateInput = document.getElementById('dateInput');
 const adminInput = document.getElementById('adminInput');
 const commentInput = document.getElementById('commentInput');
+const emailInput = document.getElementById('emailInput');

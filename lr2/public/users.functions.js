@@ -21,8 +21,21 @@ async function loadUsers() {
             usersList = data.items || data || []; 
             
             renderUsersTable(usersList);
+            updateDatalists(usersList);
         }
     } catch (error) { console.error('Помилка:', error); }
+}
+
+function updateDatalists(users) {
+    const usersDl = document.getElementById('usersDatalist');
+    const adminsDl = document.getElementById('adminsDatalist');
+    if (!usersDl || !adminsDl) return;
+
+    usersDl.innerHTML = users.map(u => `<option value="${u.name}">`).join('');
+    adminsDl.innerHTML = users
+        .filter(u => u.role === 'Адміністратор')
+        .map(u => `<option value="${u.name}">`)
+        .join('');
 }
 
 function renderUsersTable(usersToRender) {
@@ -45,7 +58,8 @@ async function addUser(event) {
     if (!validateUserForm()) return;
 
     const userData = { 
-        name: userNameInput.value.trim(), 
+        name: userNameInput.value.trim(),
+        email: userEmailInput.value.trim(), 
         role: userRoleSelect.value
     };
 
