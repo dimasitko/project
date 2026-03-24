@@ -6,7 +6,7 @@ export async function seed() {
 
     console.log("🌱 Початок генерації даних");
 
-    await run(`INSERT INTO users (email, name, role) VALUES ('admin@gmail.com', 'Сабур Адмін', 'Адміністратор');`);
+    await run(`INSERT INTO users (email, name, role) VALUES ('admin@gmail.com', 'Адмін', 'Адміністратор');`);
     await run(`INSERT INTO users (email, name, role) VALUES ('security@gmail.com', 'Охоронець Вадим', 'Адміністратор');`);
 
     const teachers = [
