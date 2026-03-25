@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS passes (
     user_id INTEGER NOT NULL,
     admin_id INTEGER NOT NULL,
     status VARCHAR NOT NULL CHECK(status IN ('Вчитель', 'Студент', 'Техперсонал')),
-    date VARCHAR NOT NULL CHECK(length(date) >= 10)
+    date VARCHAR NOT NULL CHECK(length(date) >= 10),
     comment VARCHAR,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),

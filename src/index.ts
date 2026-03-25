@@ -5,6 +5,7 @@ import passesRoutes from "./routes/passes.routes";
 import usersRoutes from "./routes/users.routes";
 import logsRoutes from "./routes/logs.routes";
 import { migrate } from "./db/migrate";
+import { seed } from "./db/seed";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -15,7 +16,7 @@ app.use(express.static("public"));
 
 async function bootstrap() {
     await migrate();
-
+    await seed();
 
 app.get("/health", (_req, res) => res.status(200).json({ ok: true }));
 app.get("/api/boom", () => {
