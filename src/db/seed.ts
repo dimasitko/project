@@ -35,7 +35,7 @@ export async function seed() {
     for (let i = 1; i <= 20; i++) {
         const userId = (i % 20) + 3;
         const status = i % 5 === 0 ? 'Вчитель' : 'Студент';
-        await run(`INSERT INTO passes (user_id, admin_id, status, date, commemt) VALUES (${userId}, 1, '${status}', '2026-05-${10 + (i % 15)}', '-');`);
+        await run(`INSERT INTO passes (user_id, admin_id, status, date, comment) VALUES (${userId}, 1, '${status}', '2026-05-${10 + (i % 15)}', '');`);
     }
 
     console.log("Базу наповнено користувачами");
