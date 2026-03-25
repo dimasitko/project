@@ -11,7 +11,7 @@ if (usersTableBody) {
         }
     });
 }
-1
+
 if (userSearchInput) {
     userSearchInput.addEventListener('input', loadUsers);
 }

@@ -166,6 +166,8 @@ function validatePassForm() {
 function clearPassForm(event) {
     if(event) event.preventDefault();
     form.reset();
+    emailInput.readOnly = false; 
+    emailInput.style.backgroundColor = "#ffffff";
     submitBtn.textContent = 'Додати';
     editPassId = null;
     document.querySelectorAll('#passes-view .invalid').forEach(el => el.classList.remove('invalid'));
@@ -192,7 +194,7 @@ function editPass(id) {
         emailInput.style.backgroundColor = "#e9ecef";
         statusSelect.value = item.status;
         dateInput.value = item.date; 
-        adminName.value = item.admin.trim();
+        adminInput.value = item.adminName.trim();
         commentInput.value = item.comment; 
         editPassId = id;
         submitBtn.textContent = 'Зберегти'; 

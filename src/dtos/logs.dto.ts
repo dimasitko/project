@@ -3,7 +3,7 @@ import ApiError from "../utils/ApiError";
 export interface Log {
     id: number;
     action: string;
-    timestamp: string;
+    created_at: string;
 }
  
 export class CreateLogDto {
@@ -31,11 +31,11 @@ export class CreateLogDto {
 export class LogResponseDto {
     id: number;
     action: string;
-    timestamp: string;
+    created_at: string;
  
     constructor(log: Log) {
         this.id = log.id;
         this.action = log.action;
-        this.timestamp = log.timestamp;
+        this.created_at = log.created_at;
     }
 }
