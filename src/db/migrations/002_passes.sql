@@ -9,3 +9,4 @@ CREATE TABLE IF NOT EXISTS passes (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (admin_id) REFERENCES users(id)
 );
+CREATE INDEX IF NOT EXISTS idx_passes_status_date ON passes(status, date);

@@ -3,3 +3,4 @@ CREATE TABLE IF NOT EXISTS logs (
     action VARCHAR NOT NULL CHECK(length(action) > 0),
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs(timestamp);

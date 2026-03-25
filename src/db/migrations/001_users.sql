@@ -5,3 +5,4 @@ CREATE TABLE IF NOT EXISTS users (
     role VARCHAR NOT NULL CHECK(role IN ('Вчитель', 'Студент', 'Адміністратор', 'Техперсонал')),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX IF NOT EXISTS idx_users_name ON users(name);
