@@ -61,7 +61,6 @@ input.invalid, select.invalid, textarea.invalid {
 
 .group {
     margin-bottom: 15px;
-
 }
 
 label {
@@ -146,7 +145,11 @@ td:last-child, th:last-child {
     flex: 1;
     gap: 10px;
     border-radius: 10px;
+}
 
+#logSearchInput{
+    margin-bottom: 25px; 
+    width: 100%;
 }
 
 #statusSearch {
@@ -154,6 +157,13 @@ td:last-child, th:last-child {
     gap: 10px;
     border-radius: 10px;
 }
+
+#userSearch{
+    flex: 1;
+    gap: 10px;
+    border-radius: 10px;
+}
+
 .btn-group {
     display: flex;
     flex-direction: column;

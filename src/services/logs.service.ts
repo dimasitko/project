@@ -2,8 +2,8 @@ import repository from "../repositories/logs.repository";
 import { CreateLogDto, Log } from "../dtos/logs.dto";
 
 class LogsService {
-    async getAllLogs(): Promise<Log[]> {
-        return await repository.getAll();
+    async getAllLogs(query: { search?: string }): Promise<Log[]> {
+        return await repository.getAll(query.search);
     }
 
     async createLog(createDto: CreateLogDto): Promise<Log> {

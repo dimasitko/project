@@ -2,8 +2,16 @@ import { Log } from "../dtos/logs.dto";
 import { all, run, escapeSql } from "../db/dbClient";
 
 class LogsRepository {
-    async getAll(): Promise<Log[]> {
-        return await all<Log>("SELECT * FROM logs ORDER BY id DESC LIMIT 50;");
+    async getAll(search? : string): Promise<Log[]> {
+        let sql = "SELECT * FROM logs WHERE 1=1";
+       if (search) {
+            const searchLower = search.toLowerCase();
+            const searchCapitalized = searchLower.charAt(0).toUpperCase() + searchLower.slice(1);
+            sql += ` AND (action LIKE '%${escapeSql(searchLower)}%' OR action LIKE '%${escapeSql(searchCapitalized)}%')`;
+        }
+        
+        sql += " ORDER BY id DESC LIMIT 50;";
+        return await all<Log>(sql);
     }
     
     async add(action: string, timestamp: string): Promise<Log> {

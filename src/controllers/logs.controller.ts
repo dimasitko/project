@@ -5,7 +5,7 @@ import { CreateLogDto} from "../dtos/logs.dto";
 class LogsController {
     async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const logs = await service.getAllLogs();
+            const logs = await service.getAllLogs(req.query);
             res.status(200).json({ items: logs, total: logs.length });
         } catch (error) {
             next(error);

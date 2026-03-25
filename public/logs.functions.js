@@ -2,12 +2,18 @@ const LOGS_API_URL = '/api/logs';
 
 async function loadLogs() {
     try {
-        const response = await fetch(LOGS_API_URL);
+        const url = new URL(LOGS_API_URL, window.location.origin);
+        if (logSearchInput && logSearchInput.value.trim()) {
+            url.searchParams.append('search', logSearchInput.value.trim());
+        }
+        const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
             renderLogsTable(data.items || []);
         }
-    } catch (error) { console.error('Помилка:', error); }
+    } catch (error) { 
+        console.error('Помилка:', error);
+    }
 }
 
 function renderLogsTable(logs) {
