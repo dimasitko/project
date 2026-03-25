@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     action VARCHAR NOT NULL CHECK(length(action) > 0),
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs(timestamp);
+CREATE INDEX IF NOT EXISTS idx_logs_created_at ON logs(created_at);
