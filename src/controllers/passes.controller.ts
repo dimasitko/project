@@ -5,7 +5,8 @@ import { CreatePassDto, UpdatePassDto } from "../dtos/passes.dto";
 class PassesController {
     async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const passes = await service.getAllPasses(req.query);
+            const filters = req.query as Record<string, string>;
+            const passes = await service.getAllPasses(filters);
             res.status(200).json({ items: passes, total: passes.length });
         } catch (error) {
             next(error);

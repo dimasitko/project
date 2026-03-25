@@ -2,11 +2,30 @@ import { Pass, UpdatePassDto } from "../dtos/passes.dto";
 import { all, get, run, escapeSql } from "../db/dbClient";
 
 class PassesRepository {
-    async getAll(status?: string, search?: string): Promise<any[]> {
+    async getAll(queryParams: { status?: string, search?: string, user_id?: string, sort?: string, order?: string }): Promise<any[]> {
     let sql = `SELECT p.id, p.status, p.date, p.comment, p.created_at, u.name as userName, u.email as userEmail, a.name as adminName FROM passes p JOIN users u ON p.user_id = u.id JOIN users a ON p.admin_id = a.id WHERE 1=1`;
-    if (status && status !== "Всі") sql += ` AND p.status = '${escapeSql(status)}'`;
-    if (search) sql += ` AND u.name LIKE '%${escapeSql(search)}%'`;
-    return await all(sql + " ORDER BY p.id DESC LIMIT 100;");
+
+    if (queryParams.status && queryParams.status !== "Всі") {
+        sql += ` AND p.status = '${escapeSql(queryParams.status)}'`;
+    }
+    
+    if (queryParams.search) {
+        const searchLower = queryParams.search.toLowerCase();
+        const searchCapitalized = searchLower.charAt(0).toUpperCase() + searchLower.slice(1);
+        sql += ` AND (u.name LIKE '%${escapeSql(searchLower)}%' OR u.name LIKE '%${escapeSql(searchCapitalized)}%')`;
+    }
+
+    if (queryParams.user_id) {
+        sql += ` AND p.user_id = '${escapeSql(queryParams.user_id)}'`; 
+    }
+
+    const validSort = ['id', 'date', 'created_at', 'status'];
+    const sortCol = validSort.includes(queryParams.sort as string) ? `p.${queryParams.sort}` : 'p.id';
+    const sortOrder = String(queryParams.order).toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+    sql += ` ORDER BY ${sortCol} ${sortOrder} LIMIT 100;`;
+
+    return await all(sql);
 }
 
    async getById(id: number): Promise<Pass | undefined> {

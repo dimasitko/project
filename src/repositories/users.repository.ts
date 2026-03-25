@@ -4,8 +4,15 @@ import { all, get, run, escapeSql } from "../db/dbClient";
 class UsersRepository {
     async getAll(role?: string, search?: string): Promise <User[]> {
         let sql = "SELECT * FROM users WHERE 1=1";
+
         if (role && role !== "Всі") sql += ` AND role = '${escapeSql(role)}'`;
-        if (search) sql += ` AND name LIKE '%${escapeSql(search)}%'`;
+
+        if (search) {
+        const searchLower = search.toLowerCase();
+        const searchCapitalized = searchLower.charAt(0).toUpperCase() + searchLower.slice(1);
+        sql += ` AND (name LIKE '%${escapeSql(searchLower)}%' OR name LIKE '%${escapeSql(searchCapitalized)}%')`;
+        }
+        
         sql += " ORDER BY id DESC;";
         return await all<User>(sql);
     }

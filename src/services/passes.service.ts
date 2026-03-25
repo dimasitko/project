@@ -4,8 +4,8 @@ import { CreatePassDto, UpdatePassDto, Pass } from "../dtos/passes.dto";
 import ApiError from "../utils/ApiError";
 
 class PassesService {
-    async getAllPasses(query: { status?: string; search?: string }): Promise<any[]> {
-        return await repository.getAll(query.status, query.search);
+    async getAllPasses(query: { status?: string; search?: string; user_id?: string; sort?: string; order?: string}): Promise<unknown[]> {
+        return await repository.getAll(query);
     }
 
     async getPassById(id: string): Promise<Pass> {
