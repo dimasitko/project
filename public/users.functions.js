@@ -79,8 +79,20 @@ async function addUser(event) {
             createLog(`${action} користувача ${userData.role} ${userData.name}`);
             await loadUsers();
             clearUserForm();
+        } else if (response.status === 400) {
+            userEmailError.textContent = "Некоректний формат Email";
+            userEmailInput.classList.add('invalid');
+            userEmailInput.focus();
+        } else if (response.status === 409) {
+            userEmailError.textContent = "Користувач з таким Email вже існує";
+            userEmailInput.classList.add('invalid');
+            userEmailInput.focus();
+        } else {
+            console.error('Непередбачена помилка сервера:', response.status);
         }
-    } catch (error) { console.error('Помилка збереження:', error); }
+    } catch (error) {
+         console.error('Помилка збереження:', error); 
+        }
 }
 
 function clearUserForm() {
