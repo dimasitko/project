@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS passes (
     date VARCHAR NOT NULL CHECK(length(date) >= 10),
     comment VARCHAR,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (admin_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_passes_status_date ON passes(status, date);

@@ -15,6 +15,7 @@ const db = new sqlite3.Database(dbPath, (err: Error | null) => {
         console.error("Failed to open SQLite DB:", err.message);
         process.exit(1);
     }
+    db.run("PRAGMA foreign_keys = ON");
     console.log("SQLite DB opened:", dbPath);
 });
 
