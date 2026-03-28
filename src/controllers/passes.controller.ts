@@ -26,7 +26,7 @@ class PassesController {
             const dto = new CreatePassDto(req.body).validate();
             const newPass = await service.createPass(dto);
             res.status(201).json({ data: newPass });
-        } catch (error) { 
+        } catch (error) {
             next(error);
         }
     }

@@ -7,7 +7,7 @@ const dataDir = path.join(__dirname, "..", "data");
 const dbPath = path.join(dataDir, "app.db");
 
 if (!fs.existsSync(dataDir)) {
- fs.mkdirSync(dataDir, { recursive: true });
+    fs.mkdirSync(dataDir, { recursive: true });
 }
 
 const db = new sqlite3.Database(dbPath, (err: Error | null) => {

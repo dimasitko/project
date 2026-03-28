@@ -18,21 +18,21 @@ async function bootstrap() {
     await migrate();
     await seed();
 
-app.get("/health", (_req, res) => res.status(200).json({ ok: true }));
-app.get("/api/boom", () => {
-    throw new Error("Boom (demo)");
-});
+    app.get("/health", (_req, res) => res.status(200).json({ ok: true }));
+    app.get("/api/boom", () => {
+        throw new Error("Boom (demo)");
+    });
 
-app.use("/api/passes", passesRoutes);
-app.use("/api/users", usersRoutes);
-app.use("/api/logs", logsRoutes);
-app.use((_req, res) => {
-    res.status(404).json({ error: { code: "NOT_FOUND", message: "Маршрут не знайдено" } });
-});
+    app.use("/api/passes", passesRoutes);
+    app.use("/api/users", usersRoutes);
+    app.use("/api/logs", logsRoutes);
+    app.use((_req, res) => {
+        res.status(404).json({ error: { code: "NOT_FOUND", message: "Маршрут не знайдено" } });
+    });
 
-app.use(errorHandler);
+    app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`API started on: http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log(`API started on: http://localhost:${PORT}`));
 }
 
 bootstrap().catch(console.error);

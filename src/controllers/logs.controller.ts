@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import service from "../services/logs.service";
-import { CreateLogDto} from "../dtos/logs.dto";
+import { CreateLogDto } from "../dtos/logs.dto";
 
 class LogsController {
     async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {

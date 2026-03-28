@@ -21,7 +21,6 @@ class UsersService {
             created_at: new Date().toISOString()
         });
     }
-    
 
     async updateUser(id: string, updateDto: UpdateUserDto): Promise<User> {
         const user = await repository.update(Number(id), updateDto);
@@ -39,18 +38,26 @@ class UsersService {
         return await repository.getAdminsForExport();
     }
 
-    async importAdmins (data: unknown){
+    async importAdmins(data: unknown) {
         if (!Array.isArray(data)) {
             throw new ApiError(400, "BAD_REQUEST", "Дані мають бути масивом JSON");
         }
         if (data.length > 10) {
-            throw new ApiError(400, "LIMIT_EXCEEDED", "Обмеження імпорту: не більше 10 адміністраторів за один запит");
+            throw new ApiError(
+                400,
+                "LIMIT_EXCEEDED",
+                "Обмеження імпорту: не більше 10 адміністраторів за один запит"
+            );
         }
         const count = await repository.importAdminsBatch(data);
         if (count === 0) {
-            throw new ApiError(400, "BAD_REQUEST", "Не знайдено валідних даних для імпорту (потрібні name та email)");
+            throw new ApiError(
+                400,
+                "BAD_REQUEST",
+                "Не знайдено валідних даних для імпорту (потрібні name та email)"
+            );
         }
-        return {importedCount: count};  
+        return { importedCount: count };
     }
 }
 

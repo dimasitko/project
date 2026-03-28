@@ -2,12 +2,12 @@ export interface ValidationErrorDetail {
     field: string;
     message: string;
 }
- 
+
 class ApiError extends Error {
     status: number;
     code: string;
     details: ValidationErrorDetail[] | null;
- 
+
     constructor(
         status: number,
         code: string,
@@ -21,5 +21,5 @@ class ApiError extends Error {
         Object.setPrototypeOf(this, ApiError.prototype);
     }
 }
- 
+
 export default ApiError;

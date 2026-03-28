@@ -23,5 +23,5 @@ export function run(sql: string): Promise<{ lastID: number; changes: number }> {
 // Захист від синтаксичних помилок
 export function escapeSql(s: string | undefined | null | number): string {
     if (s === undefined || s === null) return "";
-    return String(s).replace(/'/g, "''"); 
+    return String(s).replace(/'/g, "''");
 }

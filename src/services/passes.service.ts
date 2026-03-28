@@ -4,7 +4,13 @@ import { CreatePassDto, UpdatePassDto, Pass } from "../dtos/passes.dto";
 import ApiError from "../utils/ApiError";
 
 class PassesService {
-    async getAllPasses(query: { status?: string; search?: string; user_id?: string; sort?: string; order?: string}): Promise<unknown[]> {
+    async getAllPasses(query: {
+        status?: string;
+        search?: string;
+        user_id?: string;
+        sort?: string;
+        order?: string;
+    }): Promise<unknown[]> {
         return await repository.getAll(query);
     }
 
@@ -50,7 +56,7 @@ class PassesService {
         const isDeleted = await repository.delete(Number(id));
         if (!isDeleted) throw new ApiError(404, "NOT_FOUND", "Пропуск не знайдено");
     }
-    
+
     async getStats(): Promise<unknown[]> {
         return await repository.getStats();
     }
