@@ -49,6 +49,27 @@ class UsersController {
             next(error);
         }
     }
+
+    //Ендпоінт на бонусні бали
+    async exportAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const data = await service.exportAdmins();
+            res.setHeader("Content-disposition", "attachment; filename=admins_export.json");
+            res.setHeader("Content-type", "application/json");
+            res.status(200).send(JSON.stringify(data, null, 2));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async importAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const result = await service.importAdmins(req.body);
+            res.status(201).json({ message: "Імпорт адміністраторів успішний", data: result });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new UsersController();

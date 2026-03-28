@@ -33,6 +33,25 @@ class UsersService {
         const isDeleted = await repository.delete(Number(id));
         if (!isDeleted) throw new ApiError(404, "NOT_FOUND", "Користувача не знайдено");
     }
+
+    // Ендпоін на бонусні бали
+    async exportAdmins() {
+        return await repository.getAdminsForExport();
+    }
+
+    async importAdmins (data: unknown){
+        if (!Array.isArray(data)) {
+            throw new ApiError(400, "BAD_REQUEST", "Дані мають бути масивом JSON");
+        }
+        if (data.length > 10) {
+            throw new ApiError(400, "LIMIT_EXCEEDED", "Обмеження імпорту: не більше 10 адміністраторів за один запит");
+        }
+        const count = await repository.importAdminsBatch(data);
+        if (count === 0) {
+            throw new ApiError(400, "BAD_REQUEST", "Не знайдено валідних даних для імпорту (потрібні name та email)");
+        }
+        return {importedCount: count};  
+    }
 }
 
 export default new UsersService();

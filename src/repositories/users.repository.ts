@@ -49,6 +49,26 @@ class UsersRepository {
         const result = await run(`DELETE FROM users WHERE id = ${id};`);
         return result.changes>0;
     }
+
+    //Ендпоін на бонусні бали
+    async getAdminsForExport(): Promise <User[]> {
+        const sql = `SELECT id, name FROM users WHERE role = 'Адміністратор' ORDER BY id DESC;`;
+        return await all<User>(sql);
+    }
+
+    async importAdminsBatch(usersData: any[]): Promise<number> {
+        let importedCount = 0;
+        for (const u of usersData) {
+            if (u.name && u.email) {
+                const createdAt = u.created_at || new Date().toISOString()
+                const sql = `INSERT INTO users (name, email, role, created_at) 
+                             VALUES ('${escapeSql(u.name)}', '${escapeSql(u.email)}', 'Адміністратор', '${createdAt}')`;
+                await run(sql);
+                importedCount++;
+            }
+        }
+        return importedCount;
+    }
 }
 
 export default new UsersRepository();
