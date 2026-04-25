@@ -174,7 +174,6 @@ function clearPassForm(event) {
     document.querySelectorAll('#passes-view .error-text').forEach(el => el.textContent = '');
 }
 
-
 async function deletePass(id) {
     const pass = passItems.find(p => String(p.id) === String(id));
     try {
@@ -202,4 +201,3 @@ function editPass(id) {
         nameInput.focus();
     }
 }
-
