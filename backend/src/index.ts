@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import errorHandler from "./middleware/error-handler.middleware";
 import loggerMiddleware from "./middleware/request-logging.middleware";
 import passesRoutes from "./routes/passes.routes";
@@ -12,20 +13,36 @@ const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
 app.use(loggerMiddleware);
-app.use(express.static("public"));
+
+const allowedOrigins = [
+    "http://localhost:5173", 
+    "http://127.0.0.1:5173"
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("Not allowed by CORS"), false);
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options(/.*/, cors());
 
 async function bootstrap() {
     await migrate();
     await seed();
 
     app.get("/health", (_req, res) => res.status(200).json({ ok: true }));
-    app.get("/api/boom", () => {
+    app.get("/api/v1/boom", () => {
         throw new Error("Boom (demo)");
     });
 
-    app.use("/api/passes", passesRoutes);
-    app.use("/api/users", usersRoutes);
-    app.use("/api/logs", logsRoutes);
+    app.use("/api/v1/passes", passesRoutes);
+    app.use("/api/v1/users", usersRoutes);
+    app.use("/api/v1/logs", logsRoutes);
     app.use((_req, res) => {
         res.status(404).json({ error: { code: "NOT_FOUND", message: "Маршрут не знайдено" } });
     });
