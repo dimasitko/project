@@ -7,10 +7,28 @@ let logsList: LogDto[] = [];
 export async function loadLogs() {
     ui.renderStatus("logs-view", "loading");
     try {
-        const res = await request<{ data: LogDto[] }>("/logs");
+        const res = await request<any>("/logs");
+        if (Array.isArray(res)) logsList = res;
+            else if (res.data && Array.isArray(res.data)) logsList = res.data;
+            else if (res.items && Array.isArray(res.items)) logsList = res.items;
+            else logsList = [];
         logsList = res.data || [];
         filterAndRenderLogs();
-    } catch (e) { ui.renderStatus("logs-view", "error", e as ApiError); }
+    } catch (e) { 
+        ui.renderStatus("logs-view", "error", e as ApiError); 
+    }
+}
+
+export async function createLog(action: string) {
+    try {
+        await request("/logs", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action })
+        });
+    } catch (e) {
+        ui.renderStatus("logs-view", "error", e as ApiError);
+    }
 }
 
 function filterAndRenderLogs() {

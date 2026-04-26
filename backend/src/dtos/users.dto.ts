@@ -35,8 +35,8 @@ export class CreateUserDto {
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
         if (this.name && this.name.length < 3)
             errors.push({ field: "name", message: "Мінімум 3 символи" });
-        if (this.name && this.name.length > 20)
-            errors.push({ field: "name", message: "Максимум 20 символів" });
+        if (this.name && this.name.length > 40)
+            errors.push({ field: "name", message: "Максимум 40 символів" });
 
         if (!VALID_ROLES.includes(this.role as (typeof VALID_ROLES)[number]))
             errors.push({ field: "role", message: "Некоректна роль" });
@@ -66,8 +66,8 @@ export class UpdateUserDto {
                 errors.push({ field: "name", message: "Ім'я обов'язкове" });
             if (this.name.length < 3)   
                 errors.push({ field: "name", message: "Мінімум 3 символи" });
-            if (this.name.length > 20)
-                errors.push({ field: "name", message: "Максимум 20 символів" });
+            if (this.name.length > 40)
+                errors.push({ field: "name", message: "Максимум 40 символів" });
         }
         if (this.role !== undefined) {
             if (!VALID_ROLES.includes(this.role as (typeof VALID_ROLES)[number]))

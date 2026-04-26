@@ -5,6 +5,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), 10000);
     options.signal = controller.signal;
+    options.cache = 'no-store';
 
     try {
         const response = await fetch(`${API_BASE_URL}${path}`, options);
@@ -13,7 +14,12 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
         const rawText = await response.text();
         if (response.ok) return rawText ? JSON.parse(rawText) : (null as unknown as T);
 
-        const payload = rawText ? JSON.parse(rawText) : null;
+       let payload = null;
+        try {
+            if (rawText) payload = JSON.parse(rawText);
+        } catch (parseError) {
+            console.error("Помилка парсингу відповіді сервера", parseError);
+        }
         throw {
             status: response.status,
             message: payload?.message ?? "Помилка сервера",

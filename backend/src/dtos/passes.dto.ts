@@ -37,8 +37,8 @@ export class CreatePassDto {
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
         if (this.userName && this.userName.length < 3)
             errors.push({ field: "name", message: "Мінімум 3 символи" });
-        if (this.userName && this.userName.length > 20)
-            errors.push({ field: "name", message: "Максимум 20 символів" });
+        if (this.userName && this.userName.length > 40)
+            errors.push({ field: "name", message: "Максимум 40 символів" });
 
         if (!this.userEmail || !this.userEmail.includes("@"))
             errors.push({ field: "userEmail", message: "Введіть коректний email" });

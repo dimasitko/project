@@ -2,6 +2,7 @@ import { request } from "./apiClient";
 import * as ui from "./ui";
 import { clearFormErrors, applyValidationErrors } from "./validation";
 import type { PassDto, UserDto, ApiError } from "./dtos";
+import { createLog } from "./logs";
 
 let passesList: PassDto[] = [];
 let availableAdmins: UserDto[] = [];
@@ -143,10 +144,48 @@ export function initPasses() {
             comment: (document.getElementById('commentInput') as HTMLTextAreaElement).value
         };
 
+        const localErrors: any[] = [];
+        
+        if (!payload.userName || payload.userName.length < 3) {
+            localErrors.push({ field: "name", message: "Мінімум 3 символи" });
+        }
+        if (payload.userName.length > 40) {
+            localErrors.push({ field: "name", message: "Максимум 40 символів" });
+        }
+        if (!payload.userEmail || !payload.userEmail.includes("@") || payload.userEmail.length < 8) {
+            localErrors.push({ field: "userEmail", message: "Коректний email (мін. 8 символів)" });
+        }
+        if(!payload.status) {
+            localErrors.push({ field: "status", message: "Оберіть причину" });
+        }
+        if (!payload.date) {
+            localErrors.push({ field: "date", message: "Оберіть дату" });
+        } else {
+            const today = new Date().toISOString().split('T')[0];
+            if (payload.date < today) {
+                localErrors.push({ field: "date", message: "Дата не може бути в минулому" });
+            }
+        }
+        if (!payload.adminId || isNaN(payload.adminId)) {
+            localErrors.push({ field: "adminId", message: "Оберіть адміністратора зі списку" });
+        }
+        if (payload.comment.length > 35) {
+            localErrors.push({ field: "comment", message: "Максимум 35 символів" });
+        }
+        if (localErrors.length > 0) {
+            applyValidationErrors(localErrors, fieldMap);
+            btn.disabled = false;
+            return;
+        }
+
         try {
             const url = editPassId ? `/passes/${editPassId}` : "/passes";
             const method = editPassId ? "PUT" : "POST";
             await request(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            const actionWord = editPassId ? "оновив" : "додав";
+            const adminName = adminInputValue || "Невідомий адміністратор";
+            await createLog(`Адміністратор ${adminName} ${actionWord} пропуск користувача ${payload.userName}`);
+            
             editPassId = null;
             btn.textContent = 'Додати';
             (e.target as HTMLFormElement).reset();
@@ -172,22 +211,29 @@ export function initPasses() {
             const isConfirmed = await ui.showModal("Ви дійсно хочете видалити цей пропуск?", true);
             if (!isConfirmed) return;
             try {
+                const passToDelete = passesList.find(p => String(p.id) === id);
+                const userName = passToDelete ? passToDelete.userName : "Невідомий користувач";
+
                 await request(`/passes/${id}`, { method: "DELETE" });
+                await createLog(`Видалено пропуск користувача ${userName}`);
+                
                 await loadPasses();
             } catch (err) {
                 await ui.showModal("Помилка видалення: " + (err as ApiError).message);
             }
         }
+        
         if (target.classList.contains('edit-btn')) {
             const item = passesList.find(p => String(p.id) === id);
             if (item) {
                 (document.getElementById('nameInput') as HTMLInputElement).value = item.userName || '';
                 (document.getElementById('emailInput') as HTMLInputElement).value = item.userEmail || '';
                 (document.getElementById('statusSelect') as HTMLSelectElement).value = item.status;
-                (document.getElementById('adminInput') as HTMLSelectElement).value = String(item.admin_id || '');
+                (document.getElementById('adminInput') as HTMLInputElement).value = item.adminName || '';
                 (document.getElementById('commentInput') as HTMLTextAreaElement).value = item.comment || '';
                 editPassId = Number(id);
                 (document.getElementById('submitBtn') as HTMLButtonElement).textContent = 'Зберегти';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     });

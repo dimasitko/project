@@ -22,13 +22,13 @@
 
         <div class="name">
           <label for="nameInput">Введіть ваше ім'я</label>
-          <input id="nameInput" type="text" autocomplete="off" placeholder="Іванов Іван" required />
+          <input id="nameInput" type="text" autocomplete="off" placeholder="Іванов Іван" minlength="3" maxlength="40" required />
           <p class="error-text" id="nameError"></p>
         </div>
 
         <div class="name">
           <label for="emailInput">Email користувача</label>
-          <input id="emailInput" type="email" autocomplete="off" placeholder="student@gmail.com" required />
+          <input id="emailInput" type="email" autocomplete="off" placeholder="student@gmail.com" minlength="8" maxlength="50" required />
           <p class="error-text" id="emailError"></p>
         </div>
 
@@ -58,7 +58,7 @@
 
         <div class="comment-field">
           <label for="commentInput">Коментар</label>
-          <textarea id="commentInput" rows="4"></textarea>
+          <textarea id="commentInput" rows="4" maxlength="35"></textarea>
           <p class="error-text" id="commentError"></p>
         </div>
 
@@ -110,12 +110,12 @@
         <h2>Додати користувача</h2>
         <div class="group">
           <label>Ім'я</label>
-          <input id="userNameInput" type="text" autocomplete="off" placeholder="Іван Іванов" required />
+          <input id="userNameInput" type="text" autocomplete="off" placeholder="Іван Іванов" minlength="3" maxlength="40" required />
           <p class="error-text" id="userNameError"></p>
         </div>
         <div class="group">
           <label>Email</label>
-          <input id="userEmailInput" type="email" autocomplete="off" placeholder="student@gmail.com" required />
+          <input id="userEmailInput" type="email" autocomplete="off" placeholder="student@gmail.com" minlength="8" maxlength="50" required />
           <p class="error-text" id="userEmailError"></p>
         </div>
         <div class="group">
