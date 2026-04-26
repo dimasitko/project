@@ -275,3 +275,39 @@ td:last-child, th:last-child {
     font-size: 1.1em;
     color: #555;
 }
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.modal-overlay.active {
+    display: flex;
+}
+.modal-box {
+    background: white;
+    padding: 24px 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    max-width: 450px;
+    text-align: center;
+}
+.modal-box p {
+    margin-bottom: 24px;
+    font-size: 16px;
+    color: #333;
+    white-space: pre-wrap; 
+}
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+.btn-ok { background: #28a745; color: white; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.btn-ok:hover { background: #218838; }
+.btn-cancel { background: #dc3545; color: white; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.btn-cancel:hover { background: #c82333; }
+.btn-cancel.hidden { display: none; } 

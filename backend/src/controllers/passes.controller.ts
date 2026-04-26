@@ -7,7 +7,7 @@ class PassesController {
         try {
             const filters = req.query as Record<string, string>;
             const passes = await service.getAllPasses(filters);
-            res.status(200).json({ items: passes, total: passes.length });
+            res.status(200).json({ data: passes, meta: { total: passes.length } });
         } catch (error) {
             next(error);
         }

@@ -24,6 +24,7 @@ export interface PassDto {
     userEmail: string;
     adminName: string;
     created_at: string;
+    admin_id?: number;
 }
 
 export interface LogDto {

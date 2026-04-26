@@ -50,8 +50,10 @@
         </div>
 
         <div class="name">
-          <label for="adminInput">ID Адміністратора</label>
-          <input id="adminInput" type="number" placeholder="ID (напр. 1)" required />
+          <label for="adminInput">Адміністратор</label>
+          <select id="adminInput" required>
+            <option value="">Оберіть адміністратора</option>
+            </select>
           <p class="error-text" id="adminError"></p>
         </div>
 
@@ -175,7 +177,16 @@
       </div>
     </div>
   </div>
-
+  <div id="customModal" class="modal-overlay">
+        <div class="modal-box">
+            <p id="modalText">Повідомлення</p>
+            <div class="modal-actions">
+                <button id="modalCancel" class="btn-cancel">Скасувати</button>
+                <button id="modalOk" class="btn-ok">ОК</button>
+            </div>
+        </div>
+    </div>
+    
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

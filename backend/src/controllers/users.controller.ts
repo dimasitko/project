@@ -6,7 +6,7 @@ class UsersController {
     async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const users = await service.getAllUsers(req.query);
-            res.status(200).json({ items: users, total: users.length });
+            res.status(200).json({ data: users, meta: { total: users.length } });
         } catch (error) {
             next(error);
         }
