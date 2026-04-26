@@ -49,11 +49,10 @@
           <p class="error-text" id="dateError"></p>
         </div>
 
-        <div class="name">
+        <div class="custom-select-wrapper" id="adminSelectWrapper">
           <label for="adminInput">Адміністратор</label>
-          <select id="adminInput" required>
-            <option value="">Оберіть адміністратора</option>
-            </select>
+          <input type="text" id="adminInput" placeholder="Оберіть адміністратора" autocomplete="off">
+          <ul class="custom-options-list" id="adminOptionsList"></ul>
           <p class="error-text" id="adminError"></p>
         </div>
 
@@ -131,6 +130,7 @@
           <p class="error-text" id="userRoleError"></p>
         </div>
         <button type="submit" id="submitUserBtn">Зберегти користувача</button>
+        <button type="button" id="clearUserBtn">Очистити</button>
       </form>
 
       <div class="passes">

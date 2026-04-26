@@ -29,6 +29,18 @@ function filterAndRenderUsers() {
     if (filtered.length) ui.renderStatus("users-view", "success");
 }
 
+export function clearForm() {
+    try {
+        (document.getElementById('userForm') as HTMLFormElement).reset();
+        (document.getElementById('submitUserBtn') as HTMLButtonElement).textContent = 'Зберегти користувача';
+        editUserId = null;
+        clearFormErrors('userForm');
+    } catch (e) {
+        console.error("Помилка очищення форми користувачів", e);
+    }
+}
+document.getElementById('clearUserBtn')?.addEventListener('click', clearForm);
+
 export function initUsers() {
     document.getElementById('userSearchInput')?.addEventListener('input', filterAndRenderUsers);
     document.getElementById('userRoleSearch')?.addEventListener('change', filterAndRenderUsers);

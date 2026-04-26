@@ -1,14 +1,15 @@
 import { request } from "./apiClient";
 import * as ui from "./ui";
 import { clearFormErrors, applyValidationErrors } from "./validation";
-// ДОДАНО: імпорт UserDto, щоб знати, як виглядає користувач
-import type { PassDto, UserDto, ApiError } from "./dtos"; 
+import type { PassDto, UserDto, ApiError } from "./dtos";
 
 let passesList: PassDto[] = [];
+let availableAdmins: UserDto[] = [];
+let selectedAdminId: number | null = null;
 let editPassId: number | null = null;
 
 const fieldMap: Record<string, { input: string, error: string }> = {
-    userName: { input: 'nameInput', error: 'nameError' },
+    name: { input: 'nameInput', error: 'nameError' },
     userEmail: { input: 'emailInput', error: 'emailError' },
     status: { input: 'statusSelect', error: 'statusError' },
     date: { input: 'dateInput', error: 'dateError' },
@@ -42,31 +43,80 @@ function filterAndRenderPasses() {
 async function loadAdminsForSelect() {
     try {
         const res = await request<any>("/users");
-
         let usersList: UserDto[] = [];
         if (Array.isArray(res)) usersList = res;
         else if (res.data && Array.isArray(res.data)) usersList = res.data;
         else if (res.items && Array.isArray(res.items)) usersList = res.items;
 
-        const admins = usersList.filter(u => {
+        availableAdmins = usersList.filter(u => {
             if (!u.role) return false;
             const r = u.role.toLowerCase();
             return r.includes('адмін') || r.includes('admin') || r === 'адміністратор';
         });
-        const select = document.getElementById('adminInput') as HTMLSelectElement;
-        if (select) {
-            select.innerHTML = '<option value="">Оберіть адміністратора...</option>';
-            admins.forEach(admin => {
-                const option = document.createElement('option');
-                option.value = String(admin.id);
-                option.textContent = admin.name;
-                select.appendChild(option);
+
+        const input = document.getElementById('adminInput') as HTMLInputElement;
+        const list = document.getElementById('adminOptionsList');
+        const wrapper = document.getElementById('adminSelectWrapper');
+
+        if (!input || !list) return;
+        
+        const renderOptions = (filterText: string) => {
+            list.innerHTML = '';
+            const filtered = availableAdmins.filter(a => 
+                a.name.toLowerCase().includes(filterText.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<li class="no-results">Нікого не знайдено</li>';
+                return;
+            }
+
+            filtered.forEach(admin => {
+                const li = document.createElement('li');
+                li.textContent = admin.name;
+                li.addEventListener('click', () => {
+                    input.value = admin.name; 
+                    selectedAdminId = Number(admin.id); 
+                    list.classList.remove('active'); 
+                });
+                list.appendChild(li);
             });
-        }
+        };
+
+        input.addEventListener('focus', () => {
+            renderOptions(input.value);
+            list.classList.add('active');
+        });
+
+        input.addEventListener('input', (e) => {
+            selectedAdminId = null;
+            renderOptions((e.target as HTMLInputElement).value);
+            list.classList.add('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (wrapper && !wrapper.contains(e.target as Node)) {
+                list.classList.remove('active');
+            }
+        });
+
     } catch (e) {
         console.error("Помилка завантаження адмінів", e);
     }
 }
+export function clearForm() {
+    try {
+        (document.getElementById('form') as HTMLFormElement).reset();
+        (document.getElementById('submitBtn') as HTMLButtonElement).textContent = 'Додати';
+        editPassId = null;
+        clearFormErrors('form');
+    }
+catch (e) {
+    console.error("Помилка очищення форми пропусків", e);
+}
+}
+
+document.getElementById('clearBtn')?.addEventListener('click', clearForm);
 
 export function initPasses() {
     loadAdminsForSelect(); 
@@ -80,12 +130,16 @@ export function initPasses() {
         btn.disabled = true;
         clearFormErrors('form');
 
+        const adminInputValue = (document.getElementById('adminInput') as HTMLInputElement).value;
+        const selectedAdmin = availableAdmins.find(a => a.name === adminInputValue);
+        const finalAdminId = selectedAdmin ? Number(selectedAdmin.id) : null;
+
         const payload = {
             userName: (document.getElementById('nameInput') as HTMLInputElement).value,
             userEmail: (document.getElementById('emailInput') as HTMLInputElement).value,
             status: (document.getElementById('statusSelect') as HTMLSelectElement).value,
             date: (document.getElementById('dateInput') as HTMLInputElement).value,
-            adminId: Number((document.getElementById('adminInput') as HTMLSelectElement).value),
+            adminId: finalAdminId,
             comment: (document.getElementById('commentInput') as HTMLTextAreaElement).value
         };
 

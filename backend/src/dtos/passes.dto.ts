@@ -35,17 +35,30 @@ export class CreatePassDto {
 
         if (!this.userName || this.userName.trim().length === 0)
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
+        if (this.userName && this.userName.length < 3)
+            errors.push({ field: "name", message: "Мінімум 3 символи" });
         if (this.userName && this.userName.length > 20)
             errors.push({ field: "name", message: "Максимум 20 символів" });
 
         if (!this.userEmail || !this.userEmail.includes("@"))
-            errors.push({ field: "userEmail", message: "Коректний email обов'язковий" });
+            errors.push({ field: "userEmail", message: "Введіть коректний email" });
+        if (this.userEmail && this.userEmail.length < 8)
+            errors.push({ field: "userEmail", message: "Мінімум 8 символів" });
+        if (this.userEmail && this.userEmail.length > 50)
+            errors.push({ field: "userEmail", message: "Максимум 50 символів" });
 
         if (!VALID_STATUSES.includes(this.status as (typeof VALID_STATUSES)[number]))
             errors.push({ field: "status", message: "Некоректна причина" });
 
-        if (!this.date) errors.push({ field: "date", message: "Оберіть дату" });
-
+        if (!this.date) {
+            errors.push({ field: "date", message: "Оберіть дату" });
+            } else {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.date < today) {
+                errors.push({ field: "date", message: "Дата не може бути в минулому" });
+                }
+            }
+           
         if (!this.adminId || isNaN(this.adminId))
             errors.push({ field: "adminId", message: "Оберіть адміністратора зі списку" });
 
@@ -79,7 +92,14 @@ export class UpdatePassDto {
                 errors.push({ field: "status", message: "Некоректна причина" });
         }
         if (this.date !== undefined) {
-            if (!this.date) errors.push({ field: "date", message: "Оберіть дату" });
+        if (!this.date) {
+            errors.push({ field: "date", message: "Оберіть дату" });
+            } else {
+            const today = new Date().toISOString().split('T')[0];
+            if (this.date < today) {
+                errors.push({ field: "date", message: "Дата не може бути в минулому" });
+                }
+            }
         }
         if (this.comment !== undefined) {
             if (this.comment.length > 35)

@@ -26,9 +26,15 @@ export class CreateUserDto {
 
         if (!this.email || !this.email.includes("@"))
             errors.push({ field: "email", message: "Введіть коректний email" });
+        if (this.email && this.email.length < 8)
+            errors.push({ field: "email", message: "Мінімум 8 символів" });
+        if (this.email && this.email.length > 50)
+            errors.push({ field: "email", message: "Максимум 50 символів" });
 
         if (!this.name || this.name.trim().length === 0)
             errors.push({ field: "name", message: "Ім'я обов'язкове" });
+        if (this.name && this.name.length < 3)
+            errors.push({ field: "name", message: "Мінімум 3 символи" });
         if (this.name && this.name.length > 20)
             errors.push({ field: "name", message: "Максимум 20 символів" });
 
@@ -58,6 +64,8 @@ export class UpdateUserDto {
         if (this.name !== undefined) {
             if (this.name.trim().length === 0)
                 errors.push({ field: "name", message: "Ім'я обов'язкове" });
+            if (this.name.length < 3)   
+                errors.push({ field: "name", message: "Мінімум 3 символи" });
             if (this.name.length > 20)
                 errors.push({ field: "name", message: "Максимум 20 символів" });
         }
