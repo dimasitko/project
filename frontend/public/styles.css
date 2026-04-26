@@ -24,7 +24,6 @@ h2 {
     color: #333;
     margin-bottom: 30px;
     text-align: center;
-
 }
 
 input.invalid, select.invalid, textarea.invalid {
@@ -146,11 +145,6 @@ td:last-child, th:last-child {
     flex: 1;
     gap: 10px;
     border-radius: 10px;
-}
-
-#logSearchInput{
-    margin-bottom: 25px; 
-    width: 100%;
 }
 
 #statusSearch {
@@ -368,6 +362,50 @@ td:last-child, th:last-child {
 .custom-options-list li.no-results:hover {
     background-color: transparent;
     color: #888;
+}
+
+.edit-btn, .delete-btn { font-size: 12px; padding: 5px 8px; }
+
+#logs-view .passes {
+    background: rgb(195, 230, 255); 
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    overflow-x: auto; 
+}
+
+#logsTable {
+    width: 100%;
+    min-width: 600px; 
+    border-collapse: collapse;
+    background: white; 
+    border-radius: 10px;
+    overflow: hidden; 
+    table-layout: auto;
+}
+
+#logsTable th {
+    background: white;
+    color: #333;
+    font-weight: bold;
+    text-align: left; 
+    padding: 16px 24px;
+}
+
+#logsTable td {
+    padding: 16px 24px;
+    color: #333;
+    text-align: left; 
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+#logsTable th:first-child,
+#logsTable td:first-child {
+    width: 25%; 
+    white-space: nowrap; 
+    color: #555;
 }
 
 @media (max-width: 980px) {
