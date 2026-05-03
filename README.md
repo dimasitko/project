@@ -1,4 +1,4 @@
-﻿# LR 3
+﻿# LR 4
 
 
 ## Підготовка та запуск
@@ -7,32 +7,88 @@
     ```bash
     npm install
     ```
-2.  **Запуск проєкту**:
+
+2.  **Frontend**:
+    ```bash
+    cd frontend
+    ```
     ```bash
     npm run dev
     ```
-3.  **База даних**:
-    Файл бази даних автоматично створюється при першому запуску за шляхом:  
-    `src/data/app.db`
+    Фронтенд запуститься на порту 
+    `http://localhost:5173`
+
+
+3.  **Backend**:
+    ```bash
+    cd backend
+    ```
+    ```bash
+    npm run dev
+    ```
+    Бекенд запуститься на порту 
+    `http://localhost:3000`
+
+
 
 ## Пару curl запитів
 
   Перегляд всіх users:
   ```bash
-  curl -i http://localhost:3000/api/users
+  curl -i http://localhost:3000/api/v1/users
   ```
 
   Створити нового користувача:
   ```bash
-  curl -X POST http://localhost:3000/api/users \
+  curl -X POST http://localhost:3000/api/v1/users \
      -H "Content-Type: application/json" \
      -d '{"name": "Микола Гоголь", "email": "gogol@ukr.net", "role": "Вчитель"}'
   ```
 
   Пошук користувачів за частиною імені:
   ```bash
-  curl "http://localhost:3000/api/users?search=Пет"
+  curl "http://localhost:3000/api/v1/users?search=Пет"
   ```
+
+## Відтворювані сценарії для перевірки
+
+### 1. Перевірка GET-запитів(200 OK)
+Отримати список усіх користувачів:
+```bash
+curl -i http://localhost:3000/api/v1/users
+```
+
+### 2. Перевірка POST-запиту (201 Created)
+Створити нового користувача:
+```bash
+curl -X POST http://localhost:3000/api/v1/users \
+   -H "Content-Type: application/json" \
+   -d '{"name": "Микола Гоголь", "email": "gogol@ukr.net", "role": "Вчитель"}'
+```
+
+### 3. Перевірка обробки помилок(400 Bad Request)
+Спробуємо створити користувача з некоректним email та занадто коротким ім'ям:
+``` bash
+curl -i -X POST http://localhost:3000/api/v1/users \
+   -H "Content-Type: application/json" \
+   -d '{"name": "Я", "email": "bad-email", "role": "Студент"}'
+```
+
+### 4. Перевірка CORS (500 Internal Server Error)
+Бекенд налаштовано так, щоб дозволяти запити лише з http://localhost:5173. Спробуємо відправити запит з іншого Origin:
+```bash
+curl -i -X GET http://localhost:3000/api/v1/users \
+   -H "Origin: [http://evil-hacker.com](http://evil-hacker.com)"
+```
+
+### 4. Розширена перевірка CORS(204 No Content)
+**Дозволений Origin**
+Браузер перед POST/PUT запитами часто робить OPTIONS-запит (preflight), щоб перевірити дозволи. Зімітуємо його:
+```bash
+curl -i -X OPTIONS http://localhost:3000/api/v1/users \
+   -H "Origin: http://localhost:5173" \
+   -H "Access-Control-Request-Method: POST"
+```
 
 ## Схема бази даних
 
@@ -74,7 +130,7 @@
 
 ## Ендпоінти та приклади запитів
 
-### 1. Пошук перепусток (WHERE + ORDER BY + LIMIT)
+### 1. Пошук перепусток
 Ендпоінт підтримує складні комбінації параметрів для точної вибірки:
 `GET /api/passes?status=Студент&sort=date&order=desc&limit=5`
 
@@ -92,7 +148,7 @@ curl "http://localhost:3000/api/passes?status=Студент&sort=date&order=des
 curl "http://localhost:3000/api/passes/with-users"
 ```
 
-### 3. Агрегація даних (COUNT + GROUP BY)
+### 3. Агрегація даних
 Ендпоінт повертає статистику кількості перепусток за кожним статусом:
 `GET /api/passes/stats`
 
