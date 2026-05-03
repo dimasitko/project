@@ -17,14 +17,21 @@ const fieldMap: Record<string, { input: string, error: string }> = {
     adminId: { input: 'adminInput', error: 'adminError' },
     comment: { input: 'commentInput', error: 'commentError' }
 };
-
-export async function loadPasses() {
+export async function loadPasses(searchQuery: string = "", statusQuery: string = "Всі") {
     ui.renderStatus("passes-view", "loading");
     try {
-        const res = await request<{ data: PassDto[] }>("/passes/with-users");
+        const params = new URLSearchParams();
+        if (searchQuery) params.append("search", searchQuery);
+        if (statusQuery !== "Всі") params.append("status", statusQuery);
+        
+        const res = await request<{ data: PassDto[] }>(`/passes?${params.toString()}`);
         passesList = res.data || [];
-        filterAndRenderPasses();
-    } catch (e) { ui.renderStatus("passes-view", "error", e as ApiError); }
+        
+        passesList.length ? ui.renderPasses(passesList) : ui.renderStatus("passes-view", "empty");
+        if (passesList.length) ui.renderStatus("passes-view", "success");
+    } catch (e) { 
+        ui.renderStatus("passes-view", "error", e as ApiError); 
+    }
 }
 
 function filterAndRenderPasses() {
@@ -121,9 +128,22 @@ document.getElementById('clearBtn')?.addEventListener('click', clearForm);
 
 export function initPasses() {
     loadAdminsForSelect(); 
+    let searchTimeout: ReturnType<typeof setTimeout>;
 
-    document.getElementById('searchInput')?.addEventListener('input', filterAndRenderPasses);
-    document.getElementById('statusSearch')?.addEventListener('change', filterAndRenderPasses);
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const searchVal = (e.target as HTMLInputElement).value;
+        const statusVal = (document.getElementById('statusSearch') as HTMLSelectElement)?.value || 'Всі';
+        loadPasses(searchVal, statusVal);
+        }, 400);
+    });
+
+    document.getElementById('statusSearch')?.addEventListener('change', (e) => {
+        const statusVal = (e.target as HTMLSelectElement).value;
+        const searchVal = (document.getElementById('searchInput') as HTMLInputElement)?.value || '';
+        loadPasses(searchVal, statusVal);
+    });
 
     document.getElementById('form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
