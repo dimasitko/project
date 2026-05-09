@@ -23,50 +23,80 @@ export function renderStatus(viewId: string, status: "loading" | "empty" | "erro
 export function renderPasses(items: PassDto[]) {
     const tbody = document.querySelector("#passesTable tbody");
     if (!tbody) return;
-    tbody.innerHTML = items.map(p => `
-        <tr>
-            <td>${p.userName}</td>
-            <td>${p.status}</td>
-            <td>${p.date}</td>
-            <td>${p.adminName}</td>
-            <td>${p.comment || ''}</td>
-            <td>
-                <div class="btn-group">
-                    <button class="edit-btn" data-id="${p.id}" type="button">Редагувати</button>
-                    <button class="delete-btn" data-id="${p.id}" type="button">Видалити</button>
-                </div>
-            </td>
-        </tr>
-    `).join("");
+    tbody.innerHTML = "";
+    items.forEach(p => {
+        const tr = document.createElement("tr");
+        const cells = [
+            p.userName,
+            p.status,
+            new Date(p.date).toLocaleDateString('uk-UA'),
+            p.adminName,
+            p.comment
+        ];
+        cells.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = String(text);
+            tr.appendChild(td);
+        });
+
+        const actionTd = document.createElement("td");
+        actionTd.innerHTML = `
+            <div class="btn-group">
+                <button class="edit-btn" data-id="${p.id}" type="button">Редагувати</button>
+                <button class="delete-btn" data-id="${p.id}" type="button">Видалити</button>
+            </div>
+        `;
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+    });
 }
 
 export function renderUsers(items: UserDto[]) {
     const tbody = document.querySelector("#usersTable tbody");
     if (!tbody) return;
-    tbody.innerHTML = items.map(u => `
-        <tr>
-            <td>${u.name}</td>
-            <td>${u.role}</td>
-            <td>${u.email}</td>
-            <td>
-                <div class="btn-group">
-                    <button class="edit-btn" data-id="${u.id}" type="button">Редагувати</button>
-                    <button class="delete-btn" data-id="${u.id}" type="button">Видалити</button>
-                </div>
-            </td>
-        </tr>
-    `).join("");
+    tbody.innerHTML = "";
+    items.forEach(u => {
+        const tr = document.createElement("tr");
+        const cells = [
+            u.name,
+            u.email,
+            u.role,
+        ];
+        cells.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = String(text);
+            tr.appendChild(td);
+        });
+
+        const actionTd = document.createElement("td");
+        actionTd.innerHTML = `
+            <div class="btn-group">
+                <button class="edit-btn" data-id="${u.id}" type="button">Редагувати</button>
+                <button class="delete-btn" data-id="${u.id}" type="button">Видалити</button>
+            </div>
+        `;
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+    });
 }
 
 export function renderLogs(items: LogDto[]) {
     const tbody = document.querySelector("#logsTable tbody");
     if (!tbody) return;
-    tbody.innerHTML = items.map(l => `
-        <tr>
-            <td>${new Date(l.timestamp).toLocaleString('uk-UA')}</td>
-            <td>${l.action}</td>
-        </tr>
-    `).join("");
+    tbody.innerHTML = "";
+    items.forEach(l => {
+        const tr = document.createElement("tr");
+        const cells = [
+            new Date(l.timestamp).toLocaleDateString('uk-UA'),
+            l.action,
+        ];
+        cells.forEach(text => {
+            const td = document.createElement("td");
+            td.textContent = String(text);
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
 }
 
 export function showModal(message: string, isConfirm: boolean = false): Promise<boolean> {

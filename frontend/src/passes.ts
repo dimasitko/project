@@ -29,6 +29,7 @@ export async function loadPasses(searchQuery: string = "", statusQuery: string =
         
         passesList.length ? ui.renderPasses(passesList) : ui.renderStatus("passes-view", "empty");
         if (passesList.length) ui.renderStatus("passes-view", "success");
+        filterAndRenderPasses()
     } catch (e) { 
         ui.renderStatus("passes-view", "error", e as ApiError); 
     }
