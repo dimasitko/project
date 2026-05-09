@@ -50,9 +50,9 @@ class PassesRepository {
     }): Promise<Pass> {
         const sql = `
             INSERT INTO passes (user_id, admin_id, status, date, comment, created_at)
-            VALUES (${pass.user_id}, ${pass.admin_id}, '${escapeSql(pass.status)}', '${escapeSql(pass.date)}', '${escapeSql(pass.comment)}', '${pass.created_at}');
+            VALUES (?,?,?,?,?,?);
         `;
-        const result = await run(sql);
+        const result = await run(sql, [pass.user_id, pass.admin_id, pass.status, pass.date, pass.comment]);
         return (await this.getById(result.lastID))!;
     }
 
@@ -95,8 +95,8 @@ class PassesRepository {
     }
     // SQL ін'єкція
     async searchVulnerable(q: string): Promise<Pass[]> {
-        const sql = `SELECT * FROM passes WHERE comment LIKE '%${q}%' ORDER BY id DESC;`;
-        return await all<Pass>(sql);
+        const sql = `SELECT * FROM passes WHERE comment LIKE ? ORDER BY id DESC;`;
+        return await all<Pass>(sql, [`%${q}%`]);
     }
 }
 

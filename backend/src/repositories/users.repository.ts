@@ -31,8 +31,8 @@ class UsersRepository {
         role: string;
         created_at: string;
     }): Promise<User> {
-        const sql = `INSERT INTO users (email, name, role, created_at) VALUES ('${escapeSql(user.email)}', '${escapeSql(user.name)}', '${escapeSql(user.role)}', '${user.created_at}');`;
-        const result = await run(sql);
+        const sql = `INSERT INTO users (email, name, role, created_at) VALUES (?,?,?,?,?);`;
+        const result = await run(sql, [user.email, user.name, user.role, user.created_at]);
         return (await this.getById(result.lastID))!;
     }
 
@@ -68,8 +68,8 @@ class UsersRepository {
             if (u.name && u.email) {
                 const createdAt = escapeSql(u.created_at || new Date().toISOString());
                 const sql = `INSERT INTO users (name, email, role, created_at) 
-                             VALUES ('${escapeSql(u.name)}', '${escapeSql(u.email)}', 'Адміністратор', '${createdAt}')`;
-                await run(sql);
+                             VALUES (?,?,?,?,?)`;
+                await run(sql, [u.name, u.email, 'Адміністратор', createdAt]);
                 importedCount++;
             }
         }

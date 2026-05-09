@@ -8,7 +8,7 @@ class LogsRepository {
         if (search) {
             const searchLower = search.toLowerCase();
             const searchCapitalized = searchLower.charAt(0).toUpperCase() + searchLower.slice(1);
-            sql += ` AND (action LIKE '%${escapeSql(searchLower)}%' OR action LIKE '%${escapeSql(searchCapitalized)}%')`;
+            sql += ` AND (action LIKE ? OR action LIKE ?)`;
         }
 
         sql += " ORDER BY id DESC LIMIT 50;";
@@ -16,8 +16,8 @@ class LogsRepository {
     }
 
     async add(action: string, timestamp: string): Promise<Log> {
-        const sql = `INSERT INTO logs (action, created_at) VALUES ('${escapeSql(action)}', '${timestamp}');`;
-        const result = await run(sql);
+        const sql = `INSERT INTO logs (action, created_at) VALUES (?,?,?);`;
+        const result = await run(sql, [action, timestamp]);
         const rows = await all<Log>(`SELECT * FROM logs WHERE id = ${result.lastID};`);
         return rows[0];
     }
